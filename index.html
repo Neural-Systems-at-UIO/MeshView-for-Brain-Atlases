@@ -829,6 +829,9 @@
                     var data=xhr.response;
                     var table=points.length>0?document.getElementById("ptstable").innerHTML:
                             "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
+                    var m=url.match(/.*\/(.*\/.*$)/);
+                    if(m && m[1])
+                        url=m[1];
                     table+="<tr><td colspan='2' style='background-color:lightgray'>"+url+"</td></tr>";
                     data.forEach(function(elem){
                         var idx=points.length;
