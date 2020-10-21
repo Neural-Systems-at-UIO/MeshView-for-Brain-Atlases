@@ -1,6 +1,6 @@
 function Points(data){
-    this.idx=data.idx;
-    this.count=data.count;
+//    this.idx=data.idx;
+    this.count=data.triplets.length/3;//data.count;
     this.r=data.r;
     this.g=data.g;
     this.b=data.b;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MeshView for Brain Atlases v0.8b</title>
+        <title>MeshView for Brain Atlases v0.8c</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <style>
@@ -230,7 +230,8 @@
                     }
                     let range=document.createElement("input");
                     range.type="range";
-                    range.value=range.max=20;
+                    range.max=20;
+                    range.value=json.hasOwnProperty("alpha")?json.alpha:20;
                     range.step=1;
                     range.oninput=slide;
                     li.appendChild(range);
@@ -1179,7 +1180,7 @@
                 <label for="scale">Scale:</label><input type="range" id="scale" min="1" max="10" value="3" oninput="redraw()">
                 <input type="checkbox" id="cut" onchange="toggleCut(event)"><label for="cut">Cut</label>
                 | Cloud: <!--(<a href="example.json"  >example</a>)-->
-                <input type="file" accept="text/json" onchange="loadfile(event)">
+                <input type="file" accept="application/json" onchange="loadfile(event)">
                 <button onclick="simple_open()">Cloud from coordinates</button>
                 <input type="range" id="psize" min="1" max="10" value="2" oninput="redraw()"><label for="psize">Point size</label>
                 <div id="counter" style="display:block;float:right"></div>
