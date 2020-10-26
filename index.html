@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MeshView for Brain Atlases v0.8d</title>
+        <title>MeshView for Brain Atlases v0.8e</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <style>
@@ -575,6 +575,7 @@
                         elem.mesh.drawElements(gl,coords,normals);
                     }
                 });
+                gl.disableVertexAttribArray(normals);
             }
             function cutMesh(flatrf,flatnrm,cx,cy,cz,sx,sy,sz){
                 var prg=progs.cutmesh;
@@ -607,6 +608,7 @@
                         elem.mesh.drawElements(gl,coords,normals);
                     }
                 });
+                gl.disableVertexAttribArray(normals);
             }
             function cutSurface(flatrf,nrm,cx,cy,cz,sx,sy,sz){
                 var prg=progs.cutsurface;

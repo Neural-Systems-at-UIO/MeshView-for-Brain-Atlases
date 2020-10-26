@@ -44,7 +44,7 @@ Mesh.prototype.drawElements=function(gl,coords,normals){
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[i*2]);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers[i*2+1]);
         gl.vertexAttribPointer(coords, 3, gl.FLOAT, false, 6*4, 0);
-        if(normals)gl.vertexAttribPointer(normals, 3, gl.FLOAT, false, 6*4, 3*4);
+        if(typeof normals!=="undefined")gl.vertexAttribPointer(normals, 3, gl.FLOAT, false, 6*4, 3*4);
         gl.drawElements(gl.TRIANGLES, this.lists[i*2+1].length, gl.UNSIGNED_SHORT,0);
     }
 };
