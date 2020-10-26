@@ -11,4 +11,4 @@ Atlas links:
 [Allen Mouse Brain Atlas CCFv3 2017](http://meshview-meshview.apps.hbp.eu/?atlas=AMBA_CCFv3_2017_full) - hierarchical, 670 visible structures with root (transparent at start)  
 [Allen Mouse Brain Atlas CCFv3 root](http://meshview-meshview.apps.hbp.eu/?atlas=AMBA_CCFv3_root) - root structure only (brain outline)
 
-[demo link with cloud](http://meshview-meshview.apps.hbp.eu/?cloud=cprox.php?227dacd617b1477b9d236858407b553c/TestMesh/example.json)
+[demo link with cloud](http://meshview-meshview.apps.hbp.eu/?atlas=AMBA_CCFv3_root&cloud=https://object.cscs.ch/v1/AUTH_227dacd617b1477b9d236858407b553c/TestMesh/00008a_P_FtrExt_AllenParv__Crd.json)

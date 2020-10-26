@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MeshView for Brain Atlases v0.8c</title>
+        <title>MeshView for Brain Atlases v0.8d</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <style>
@@ -197,6 +197,9 @@
                 xhr.onload=jsonready;
                 xhr.send();
                 document.getElementById("atlas").innerText=atlasroot.replace(/_/g," ");
+                
+                if(opener!==null)
+                    openerThing();
             }
             
             var atlas=new Map();
@@ -869,26 +872,47 @@
                 };
                 xhr.send();
             }
-            function loadfile(event)
+            function loadfiles(event)
             {
-                var fr=new FileReader();
-                fr.onload=function(){
-                    var data=JSON.parse(fr.result);
-                    var table=points.length>0?document.getElementById("ptstable").innerHTML:
-                            "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-                    table+="<tr><td colspan='2' style='background-color:lightgray'>"+event.target.files[0].name+"</td></tr>";
-                    data.forEach(function(elem){
-                        var idx=points.length;
-                        table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
-                        elem.r/=255;elem.g/=255;elem.b/=255;
-                        var pts=new Points(elem);
-                        pts.createBuffer(gl);
-                        points.push(pts);
-                    });
-                    document.getElementById("ptstable").innerHTML=table;
-                    redraw();
+                for(let file of event.target.files){
+                    let fr=new FileReader();
+                    fr.onload=function(){
+                        var data=JSON.parse(fr.result);
+                        var table=points.length>0?document.getElementById("ptstable").innerHTML:
+                                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
+                        table+="<tr><td colspan='2' style='background-color:lightgray'>"+file.name+"</td></tr>";
+                        data.forEach(function(elem){
+                            var idx=points.length;
+                            table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+                            elem.r/=255;elem.g/=255;elem.b/=255;
+                            var pts=new Points(elem);
+                            pts.createBuffer(gl);
+                            points.push(pts);
+                        });
+                        document.getElementById("ptstable").innerHTML=table;
+                        redraw();
+                    };
+                    fr.readAsText(file);
+                }
+            }
+            function openerThing(){
+                opener.postMessage("ready.");
+                onmessage=function(event){
+                        var data=event.data;
+                        var table=points.length>0?document.getElementById("ptstable").innerHTML:
+                                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
+                        table+="<tr><td colspan='2' style='background-color:lightgray'>Preview</td></tr>";
+                        data.forEach(function(elem){
+                            var idx=points.length;
+                            table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+                            elem.r/=255;elem.g/=255;elem.b/=255;
+                            var pts=new Points(elem);
+                            pts.createBuffer(gl);
+                            points.push(pts);
+                        });
+                        document.getElementById("ptstable").innerHTML=table;
+                        redraw();
                 };
-                fr.readAsText(event.target.files[0]);
             }
             function showall(){
                 for(var i=0;i<points.length;i++){
@@ -1180,7 +1204,7 @@
                 <label for="scale">Scale:</label><input type="range" id="scale" min="1" max="10" value="3" oninput="redraw()">
                 <input type="checkbox" id="cut" onchange="toggleCut(event)"><label for="cut">Cut</label>
                 | Cloud: <!--(<a href="example.json"  >example</a>)-->
-                <input type="file" accept="application/json" onchange="loadfile(event)">
+                <input type="file" multiple accept="application/json" onchange="loadfiles(event)">
                 <button onclick="simple_open()">Cloud from coordinates</button>
                 <input type="range" id="psize" min="1" max="10" value="2" oninput="redraw()"><label for="psize">Point size</label>
                 <div id="counter" style="display:block;float:right"></div>

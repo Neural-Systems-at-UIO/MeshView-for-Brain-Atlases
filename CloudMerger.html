@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Cloud merger for MeshView</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            th{
+                padding: 5px;
+                background-color: lightgrey;
+            }
+            td{
+                padding: 5px;
+            }
+            .selected{
+                text-align: center;
+            }
+/*            .name{
+                text-align: right;
+            }*/
+            .count{
+                text-align: right;
+            }
+        </style>
+        <script>
+            let seen=new Set();
+            let data=new Map();
+            function load(event){
+                for(let file of event.target.files){
+                    log("loading "+file.name+" started");
+                    let fr=new FileReader();
+                    fr.onload=function(event){
+                        log("loading "+file.name+" finished");
+                        let result=event.target.result;
+                        if(seen.has(result)){
+                            log(file.name+" is duplicate");
+                            return;
+                        }
+                        seen.add(result);
+                        log("parsing "+file.name);
+                        try{
+                            let json=JSON.parse(event.target.result);
+                            log("parsing "+file.name+" finished");
+                            for(let cloud of json){
+                                if(data.has(cloud.name)){
+                                    let item=data.get(cloud.name);
+                                    item.triplets=item.triplets.concat(cloud.triplets);
+                                    item.count.innerText=item.triplets.length/3;
+                                }else{
+                                    let tr=document.createElement("tr");
+                                    let td=document.createElement("td");
+                                    td.className="selected";
+                                    let selected=document.createElement("input");
+                                    selected.type="checkbox";
+                                    selected.checked=true;
+                                    td.appendChild(selected);
+                                    tr.appendChild(td);
+                                    td=document.createElement("td");
+                                    td.innerText=cloud.name;
+                                    tr.appendChild(td);
+                                    td=document.createElement("td");
+                                    color=document.createElement("input");
+                                    color.type="color";
+                                    color.value="#"+h2(cloud.r)+h2(cloud.g)+h2(cloud.b);
+                                    td.appendChild(color);
+                                    tr.appendChild(td);
+                                    let count=document.createElement("td");
+                                    count.className="count";
+                                    count.innerText=cloud.triplets.length/3;
+                                    tr.appendChild(count);
+                                    let round=document.createElement("td");
+                                    round.className="count";
+                                    tr.appendChild(round);
+                                    document.getElementById("tbody").appendChild(tr);
+                                    data.set(cloud.name,{
+                                        selected:selected,
+                                        color:color,
+                                        triplets:cloud.triplets,
+                                        count:count,
+                                        round:round
+                                    });
+                                }
+                            }
+                        }catch(ex){
+                            log("parsing "+file.name+" failed, "+ex);
+                        }
+                        round();
+                    };
+                    fr.readAsText(file);
+                }
+            }
+            function save(){
+                let factor=document.getElementById("round").valueAsNumber;
+                let trunc=x=>Math.round(x*factor)/factor;
+                let json=[];
+                for(let mapitem of data){
+                    let item=mapitem[1];
+                    if(item.selected.checked){
+                        let color=item.color.value;
+                        let triplets=item.triplets;
+                        if(factor!==0){
+                            let tri=triplets;
+                            let set=new Set();
+                            triplets=[];
+                            for(let i=0;i<tri.length;i+=3){
+                                let triplet=tri.slice(i,i+3).map(trunc);
+                                let key=triplet.join();
+                                if(!set.has(key)){
+                                    set.add(key);
+                                    triplets.push(...triplet);
+                                }
+                            }
+                        }
+                        json.push({
+                            name:mapitem[0],
+                            r:parseInt(color.substr(1,2),16),
+                            g:parseInt(color.substr(3,2),16),
+                            b:parseInt(color.substr(5,2),16),
+                            triplets:triplets//item.triplets
+                        });
+                    }
+                }
+                let blob=new Blob([JSON.stringify(json)],{type: "text/json"});
+                let url=URL.createObjectURL(blob);
+                let a=document.createElement("a");
+                a.href=url;
+                a.download=document.getElementById("save").innerText;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+            function rename(event){
+                let s=event.target.value;
+                let b=document.getElementById("save");
+                if(s.length===0){
+                    b.disabled=true;
+                    b.innerText="Please specify a name";
+                }else{
+                    b.disabled=false;
+                    if(s.endsWith("."))
+                        s+="json";
+                    else if(s.endsWith(".j"))
+                        s+="son";
+                    else if(s.endsWith(".js"))
+                        s+="on";
+                    else if(s.endsWith(".jso"))
+                        s+="n";
+                    b.innerText=s.endsWith(".json")?s:s+".json";
+                }
+            }
+            function log(message){
+                let e=document.getElementById("log");
+                e.innerText=new Date().toLocaleTimeString()+": "+message+"\n"+e.innerText;
+            }
+            function h2(n){
+                n=n.toString(16);
+                return n.length<2?"0"+n:n;
+            }
+            function round(){
+                let factor=document.getElementById("round").valueAsNumber;
+                if(factor===0){
+                    for(let mapitem of data)
+                        mapitem[1].round.innerText=mapitem[1].count.innerText;
+                    return;
+                }
+                let trunc=x=>Math.round(x*factor)/factor;
+                for(let mapitem of data){
+                    let item=mapitem[1];
+                    let set=new Set();
+                    let tri=item.triplets;
+                    for(let i=0;i<tri.length;i+=3)
+                        set.add(tri.slice(i,i+3).map(trunc).join());
+                    mapitem[1].round.innerText=set.size;
+                }
+            }
+            function preview(){
+                let wnd=open("index.html?atlas=AMBA_CCFv3_root",Date.now());
+                
+                let factor=document.getElementById("round").valueAsNumber;
+                let trunc=x=>Math.round(x*factor)/factor;
+                let json=[];
+                for(let mapitem of data){
+                    let item=mapitem[1];
+                    if(item.selected.checked){
+                        let color=item.color.value;
+                        let triplets=item.triplets;
+                        if(factor!==0){
+                            let tri=triplets;
+                            let set=new Set();
+                            triplets=[];
+                            for(let i=0;i<tri.length;i+=3){
+                                let triplet=tri.slice(i,i+3).map(trunc);
+                                let key=triplet.join();
+                                if(!set.has(key)){
+                                    set.add(key);
+                                    triplets.push(...triplet);
+                                }
+                            }
+                        }
+                        json.push({
+                            name:mapitem[0],
+                            r:parseInt(color.substr(1,2),16),
+                            g:parseInt(color.substr(3,2),16),
+                            b:parseInt(color.substr(5,2),16),
+                            triplets:triplets//item.triplets
+                        });
+                    }
+                }
+                
+                onmessage=function(event){
+                    wnd.postMessage(json);
+                };
+            }
+        </script>
+    </head>
+    <body>
+        Add one or more MeshView JSON files <input type="file" accept="application/json" multiple oninput="load(event)"><br>
+        Set rounding factor <input type="number" id="round" value="0" min="0" max="1000" step="1" oninput="round()">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Selected</th><th>Name</th><th>Color</th><th>Count</th><th>Rounded</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+        Name of result file: <input type="text" oninput="rename(event)"><button id="save" onclick="save()" disabled>Save</button><button onclick="preview()">Preview</button><br>
+        Activity log:
+        <div id="log"></div>
+        <hr>
+        Explanation of rounding:<ul>
+            <li>0 - do nothing (save original points)</li>
+            <li>1 - round coordinates to 1s (e.g. 1.6 and 1.8 both become 2)</li>
+            <li>2 - round coordinates to 1/2s (e.g. 1.6 and 1.8 become 1.5 and 2)</li>
+            <li>3 - round coordinates to 1/3s (e.g. 1.6 and 1.8 both become 1.666...)</li>
+            <li>4 - round coordinates to 1/4s (e.g. 1.6 and 1.8 become 1.5 and 1.75)</li>
+            <li>n - round coordinates to (1/n)s.</li>
+        </ul>
+        After rounding, duplicate points are removed. This may result in significant gain in viewer performance, but can introduce visual artifacts when zoomed in.
+    </body>
+</html>
