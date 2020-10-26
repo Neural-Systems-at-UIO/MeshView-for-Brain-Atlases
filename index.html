@@ -14,7 +14,6 @@
             }
             #cnv{
                 position: absolute;
-                /*display: block;*/
             }
             #overlay{
                 position: absolute;
@@ -26,8 +25,6 @@
             #toprow{
                 padding: 5px;
                 flex: none;
-/*                width: 100%;
-                display: block;*/
                 background: #F0F0FF;
             }
             #panels{
@@ -54,11 +51,6 @@
                 padding-right: 0.5em;
                 overflow-x: auto;
                 overflow-y: scroll;
-                /*position: absolute;*/
-/*                width: 150px;*/
-/*                display: block;
-                overflow: scroll;
-                resize: horizontal;*/
             }
             #spacer{
                 flex: auto;
@@ -66,18 +58,13 @@
             #ptslist{
                 padding: 5px;
                 flex: none;
-                /*position: absolute;*/
                 width: 150px;
-                /*display: none;*/
-                /*display: block;*/
                 background: #F0F0FF;
                 overflow-y: scroll;
-                /*resize: horizontal;*/
             }
             
             #cut_box{
                 width: 370px;
-                /*height: 200px;*/
                 background: lightgray;
                 position: absolute;
                 user-select: none;
@@ -111,7 +98,6 @@
             }
             #cloud_text{
                 width:280px;
-                /*height: 500px;*/
                 height: 50vh;
             }
             
@@ -121,9 +107,6 @@
             }
             li{
                 position: relative;
-                /*padding-left: 2em;*/
-/*                list-style-position: outside;
-                text-indent: -3em;*/
             }
             .litem{
                 white-space: nowrap;
@@ -182,13 +165,6 @@
                     else if(parts[0]==="cloud"){
                         autoload(parts[1]);
                     }
-//                    else{
-//                        var control=document.getElementById(parts[0]);
-//                        switch(control.type){
-//                            case "range": control.value=parts[1];break;
-//                            case "checkbox": control.checked=parts[1]==="true";break;
-//                        }
-//                    }
                 });
                 init();
                 var xhr=new XMLHttpRequest();
@@ -243,9 +219,7 @@
                         litem.className="leaf";
                         li.appendChild(document.createTextNode(json.name));
                     }else{
-//                        li.className="junction open";
                         litem.className=json.color?"open mesh":"open nomesh";
-//                        li.className=json.color?"open mesh":"open";
                         let b=document.createElement("button");
                         b.innerText=json.name;
                         b.onclick=openclose;
@@ -286,12 +260,6 @@
                 let cl=li.classList;
                 if(!cl.replace("closed","open")){
                     cl.replace("open","closed");
-//                    let os=li.getElementsByClassName("open");
-//                    while(os.length>0)
-//                        os.item(0).classList.replace("open","closed");
-//                    let lis=li.getElementsByTagName("ul");
-//                    for(let i=0;i<lis.length;i++)
-//                        lis.item(i).hidden=true;;
                     li.getElementsByTagName("ul").item(0).hidden=true;
                 }else{
                     li.getElementsByTagName("ul").item(0).hidden=false;
@@ -299,8 +267,6 @@
             }
             function slide(event){
                 let p=event.target.parentNode.parentNode;
-//                if(p.classList.contains("mesh"))
-//                    p.getElementsByTagName("input")[0].disabled=event.target.valueAsNumber===0;
                 if(p.classList.contains("closed") || p.classList.contains("nomesh")){
                     let rs=p.getElementsByTagName("input");
                     for(let i=0;i<rs.length;i++)
@@ -317,13 +283,6 @@
                 cnv.width=window.innerWidth-1;
                 cnv.height=window.innerHeight-1;
                 
-//                var lst=document.getElementById("ptslist");
-//                lst.style.height=(window.innerHeight-lst.offsetTop-1)+"px";
-//                lst.style.left=(window.innerWidth-lst.offsetWidth-1)+"px";
-//                
-//                lst=document.getElementById("meshlist");
-//                lst.style.height=(window.innerHeight-lst.offsetTop-1)+"px";
-        
                 gl=cnv.getContext("webgl",{stencil:true,alpha:false/*,premultipliedAlpha:false*/});
                 gl.clearColor(1,1,1,1);
 
@@ -508,7 +467,6 @@
                 }else{
                     if(!document.getElementById("cut_cloud").checked){
                         cutMesh(flatrf,flatnrm,(maxx+minx)/2,(maxy+miny)/2,(maxz+minz)/2,maxx-minx,maxy-miny,maxz-minz);
-//                        ghostMesh(flatrf,flatnrm);
                         cutSurface(flatrf,nrm,(maxx+minx)/2,(maxy+miny)/2,(maxz+minz)/2,maxx-minx,maxy-miny,maxz-minz);
                         cutCloud(flatrf,(maxx+minx)/2,(maxy+miny)/2,(maxz+minz)/2,maxx-minx,maxy-miny,maxz-minz);
                     } else {
@@ -564,17 +522,6 @@
                     gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
                     gl.uniform1f(gl.getUniformLocation(prg,"pointsize"),parseFloat(document.getElementById("psize").value));
                     
-//                    var bob=parseFloat(document.getElementById("cutv").value)*Math.PI/180;
-//                    var cutnormal=[0,Math.cos(bob),Math.sin(bob),1];
-//                    var rot=parseFloat(document.getElementById("cuth").value)*Math.PI/180;
-//                    var srot=Math.sin(rot);
-//                    var crot=Math.cos(rot);
-//                    rot=ident();
-//                    rot[0][0]=rot[1][1]=crot;
-//                    rot[0][1]=srot;rot[1][0]=-srot;
-//                    cutnormal=mult([cutnormal],rot)[0];
-//                    
-//                    var pos=-parseFloat(document.getElementById("cutp").value)*Math.sqrt(sx*sx+sy*sy+sz*sz)/200;
                     var cnp=collectCut(sx,sy,sz);
                     var cutnormal=cnp.cutnormal;
                     var pos=cnp.pos;
@@ -636,18 +583,6 @@
                 gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
                 gl.uniformMatrix4fv(gl.getUniformLocation(prg,"normtrf"),false,flatnrm);
                 
-//                var bob=parseFloat(document.getElementById("cutv").value)*Math.PI/180;
-//                var cutnormal=[0,Math.cos(bob),Math.sin(bob),1];
-//                var rot=parseFloat(document.getElementById("cuth").value)*Math.PI/180;
-//                var srot=Math.sin(rot);
-//                var crot=Math.cos(rot);
-//                rot=ident();
-//                rot[0][0]=rot[1][1]=crot;
-//                rot[0][1]=srot;rot[1][0]=-srot;
-//                cutnormal=mult([cutnormal],rot)[0];
-//                
-//                var pos=-parseFloat(document.getElementById("cutp").value)*Math.sqrt(sx*sx+sy*sy+sz*sz)/200;
-
                 var cnp=collectCut(sx,sy,sz);
                 var cutnormal=cnp.cutnormal;
                 var pos=cnp.pos;
@@ -679,16 +614,6 @@
         
                 gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
                 
-//                var bob=parseFloat(document.getElementById("cutv").value)*Math.PI/180;
-//                var cutnormal=[0,Math.cos(bob),Math.sin(bob),1];
-//                var rot=parseFloat(document.getElementById("cuth").value)*Math.PI/180;
-//                var srot=Math.sin(rot);
-//                var crot=Math.cos(rot);
-//                rot=ident();
-//                rot[0][0]=rot[1][1]=crot;
-//                rot[0][1]=srot;rot[1][0]=-srot;
-//                cutnormal=mult([cutnormal],rot)[0];
-
                 var cnp=collectCut(sx,sy,sz);
                 var cutnormal=cnp.cutnormal;
                 var pos=cnp.pos;
@@ -696,14 +621,11 @@
                 var tmp=mult([cutnormal],inv4x4(nrm))[0];
                 if(tmp[2]>0)return;
                 
-//                var pos=-parseFloat(document.getElementById("cutp").value)*Math.sqrt(sx*sx+sy*sy+sz*sz)/200;
                 gl.uniform3f(gl.getUniformLocation(prg,"cutbase"),cx+cutnormal[0]*pos,cy+cutnormal[1]*pos,cz+cutnormal[2]*pos);
                 gl.uniform3fv(gl.getUniformLocation(prg,"cutnormal"),cutnormal.slice(0,3));
  
                 var coords = gl.getAttribLocation(prg, "coords");
                 gl.enableVertexAttribArray(coords);
-//                var normals = gl.getAttribLocation(prg, "normals");
-//                gl.enableVertexAttribArray(normals);
                 
                 var color=gl.getUniformLocation(prg,"color");
                 
@@ -732,45 +654,7 @@
                 });
                 gl.enable(gl.CULL_FACE);
                 gl.disable(gl.STENCIL_TEST);
-                
             }
-//            function ghostMesh(flatrf,flatnrm){
-//                var prg=progs.ghostmesh;
-//                gl.useProgram(prg);
-//        
-//                gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
-//                gl.uniformMatrix4fv(gl.getUniformLocation(prg,"normtrf"),false,flatnrm);
-// 
-//                var coords = gl.getAttribLocation(prg, "coords");
-//                gl.enableVertexAttribArray(coords);
-//                var normals = gl.getAttribLocation(prg, "normals");
-//                gl.enableVertexAttribArray(normals);
-//                
-//                gl.enable(gl.BLEND);
-//                gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-//                gl.depthMask(false);
-//
-//                var color=gl.getUniformLocation(prg,"color");
-//                
-//                gl.enable(gl.CULL_FACE);
-//                gl.cullFace(gl.FRONT);
-//                atlas.forEach(function(elem){
-//                    if(elem.mesh && elem.enabled && elem.transparent){
-//                        gl.uniform3f(color,elem.r/255,elem.g/255,elem.b/255);
-//                        elem.mesh.drawElements(gl,coords,normals);
-//                    }
-//                });
-//                gl.cullFace(gl.BACK);
-//                atlas.forEach(function(elem){
-//                    if(elem.mesh && elem.enabled && elem.transparent){
-//                        gl.uniform3f(color,elem.r/255,elem.g/255,elem.b/255);
-//                        elem.mesh.drawElements(gl,coords,normals);
-//                    }
-//                });
-//                
-//                gl.depthMask(true);
-//                gl.disable(gl.BLEND);
-//            }
             
             function transparentMesh(flatrf){
                 var prg=progs.transparentmesh;
@@ -787,7 +671,6 @@
 
                 var color=gl.getUniformLocation(prg,"color");
                 
-//                var f=0.05;
                 var a=0.5;
                 
                 gl.enable(gl.CULL_FACE);
@@ -795,8 +678,6 @@
                 atlas.forEach(function(elem){
                     var f=elem.a;
                     if(elem.mesh && f>0 && f<1){
-//                        gl.uniform4f(color,elem.r/255,elem.g/255,elem.b/255,f);
-//                        gl.uniform4f(color,elem.r/255*f,elem.g/255*f,elem.b/255*f,f);
                         gl.uniform4f(color,elem.r*(a+f),elem.g*(a+f),elem.b*(a+f),f);
                         elem.mesh.drawElements(gl,coords);
                     }
@@ -805,8 +686,6 @@
                 atlas.forEach(function(elem){
                     var f=elem.a;
                     if(elem.mesh && f>0 && f<1){
-//                        gl.uniform4f(color,elem.r/255,elem.g/255,elem.b/255,f);
-//                        gl.uniform4f(color,elem.r/255*f,elem.g/255*f,elem.b/255*f,f);
                         gl.uniform4f(color,elem.r*(a+f),elem.g*(a+f),elem.b*(a+f),f);
                         elem.mesh.drawElements(gl,coords);
                     }
@@ -816,28 +695,6 @@
                 gl.disable(gl.BLEND);
             }
             
-//            function loadfile(event)
-//            {
-//                var fr=new FileReader();
-//                fr.onload=function(){
-//                    var data=JSON.parse(fr.result);
-//                    points=[];
-//                    var table=null;
-//                    data.forEach(function(elem,idx){
-//                        if(table===null)table="<table><tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-//                        table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
-//                        var pts=new Points(elem);
-//                        pts.createBuffer(gl);
-//                        points.push(pts);
-//                    });
-//                    if(table!==null){
-//                        table+="</table>";
-//                        document.getElementById("ptslist").innerHTML=table;
-//                    }
-//                    redraw();
-//                };
-//                fr.readAsText(event.target.files[0]);
-//            }
             function autoload(url){
                 var start=Date.now();
                 var xhr=new XMLHttpRequest();
@@ -933,75 +790,6 @@
                 redraw();
             }
             
-//            function meshtable(){
-//                function hex(x){
-//                    return ("0"+x.toString(16)).slice(-2);
-//                }
-////                var table="<table><tr>"+
-////                        "<td colspan='3'><button onclick='meshshowall()'>Show</button><br>"+
-////                        "<button onclick='meshtranall()'>Transparent</button><br>"+
-////                        "<button onclick='meshhideall()'>Hide</button></td>"+
-////                        "</tr>";
-//                var table="<table>";
-//                atlas.forEach(function(elem,idx){
-////                    table+="<tr>"+
-////                            "<td><input type='checkbox' checked id='m"+idx+"' onchange='mtoggle("+idx+")'></td>"+
-////                            "<td><input type='checkbox' id='t"+idx+"' onchange='ttoggle("+idx+")'></td>"+
-////                            "<td>"+elem.name+"</td>"+
-////                            "</tr>";
-//                    table+="<tr>"+
-//                            "<td><input type='color' id='c"+idx+"' value='#"+hex(elem.r)+hex(elem.g)+hex(elem.b)+"' oninput='cchange("+idx+")' style='width:20px'></td>"+
-//                            "<td><input type='range' id='v"+idx+"' min='0' max='20' value='20' oninput='vchange("+idx+")' style='width:50px'></td>"+
-//                            "<td>"+elem.name+"</td>"+
-//                            "</tr>";
-////                    elem.enabled=true;
-////                    elem.transparent=false;
-//                    elem.visibility=1;
-//                });
-//                table+="</table>";
-//                document.getElementById("meshlist").innerHTML=table;
-//            }
-//            function meshshowall(){
-//                for(var i=0;i<atlas.length;i++){
-//                    atlas[i].visibility=1;
-//                    document.getElementById("v"+i).value=20;
-////                    atlas[i].enabled=true;
-////                    atlas[i].transparent=false;
-////                    document.getElementById("m"+i).checked=true;
-////                    document.getElementById("t"+i).checked=false;
-//                }
-//                redraw();
-//            }
-//            function meshtranall(){
-//                for(var i=0;i<atlas.length;i++){
-//                    atlas[i].visibility=0.05;
-//                    document.getElementById("v"+i).value=1;
-////                    atlas[i].enabled=true;
-////                    atlas[i].transparent=true;
-////                    document.getElementById("m"+i).checked=true;
-////                    document.getElementById("t"+i).checked=true;
-//                }
-//                redraw();
-//            }
-//            function meshhideall(){
-//                for(var i=0;i<atlas.length;i++){
-//                    atlas[i].visibility=0;
-//                    document.getElementById("v"+i).value=0;
-////                    atlas[i].enabled=false;
-////                    atlas[i].transparent=false;
-////                    document.getElementById("m"+i).checked=false;
-////                    document.getElementById("t"+i).checked=false;
-//                }
-//                redraw();
-//            }
-//            function mtoggle(idx){
-//                atlas[idx].enabled=document.getElementById("m"+idx).checked;
-//                redraw();
-//            }
-//            function ttoggle(idx){
-//                atlas[idx].transparent=document.getElementById("t"+idx).checked;
-//                redraw();
-//            }
             function cchange(idx){
                 var c=document.getElementById("c"+idx).value.substring(1);
                 atlas[idx].r=parseInt(c.substring(0,2),16);
@@ -1114,7 +902,6 @@
                 rot[0][1]=srot;rot[1][0]=-srot;
                 cutnormal=mult([cutnormal],rot)[0];
 
-//                var pos=-parseFloat(document.getElementById("cutp").value)*Math.sqrt(sx*sx+sy*sy+sz*sz)/200;
                 var pos=-(document.getElementById("cut_level").valueAsNumber-50)*Math.sqrt(sx*sx+sy*sy+sz*sz)/100;
                 
                 return {cutnormal:cutnormal,pos:pos};
@@ -1132,16 +919,7 @@
                 document.getElementById("cloud_text").value="";
                 document.getElementById("simple_cloud").style.display="none";
             }
-//                    data.forEach(function(elem){
-//                        var idx=points.length;
-//                        table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
-//                        var pts=new Points(elem);
-//                        pts.createBuffer(gl);
-//                        points.push(pts);
-//                    });
-//                };
-//                fr.readAsText(event.target.files[0]);
-//            }
+            
             function simple_add(){
                 try{
                     var table=points.length>0?document.getElementById("ptstable").innerHTML:
@@ -1196,15 +974,13 @@
         </script>
     </head>
     <body onload="startup()">
-        <!--<canvas id="cnv" onmousedown="mdown(event)" onmousemove="mmove(event)" onmouseup="mup(event)" onmouseout="mout(event)"></canvas>-->
         <canvas id="cnv"></canvas>
         <div id="overlay">
             <div id="toprow">
                 Atlas: <span id="atlas"></span>.
                 <label for="scale">Scale:</label><input type="range" id="scale" min="1" max="10" value="3" oninput="redraw()">
                 <input type="checkbox" id="cut" onchange="toggleCut(event)"><label for="cut">Cut</label>
-                | Cloud: <!--(<a href="example.json"  >example</a>)-->
-                <input type="file" multiple accept="application/json" onchange="loadfiles(event)">
+                | Cloud: <input type="file" multiple accept="application/json" onchange="loadfiles(event)">
                 <button onclick="simple_open()">Cloud from coordinates</button>
                 <input type="range" id="psize" min="1" max="10" value="2" oninput="redraw()"><label for="psize">Point size</label>
                 <div id="counter" style="display:block;float:right"></div>
@@ -1212,7 +988,6 @@
             <div id="panels">
                 <div id="meshpanel">
                     <div id="global" style="display: flex">All:<input type="range" min="0" max="20" value="20" step="1" oninput="setGlobal(event)" style="width:100%"></div>
-                    <!--<div id="meshlist"></div>-->
                     <ul id="tree"></ul>
                     <div>
                         <span style="float:right">Resize panel here =&gt;</span>
@@ -1225,13 +1000,10 @@
         <div id="cut_box">
             <div id="cut_handle">Cut controls</div>
             <hr>
-            <!--<input type="checkbox" id="cut_enable"><label for="cut_enable">Enable</label>-->
-            <!--<input type="checkbox" id="cut_face"><label for="cut_face">Face</label>-->
             <label for="cut_hrot">H</label><input type="number" id="cut_hrot" step="0.05" value="0" oninput="cut_input(event)">
             <label for="cut_hrot">V</label><input type="number" id="cut_vrot" step="0.05" value="0" oninput="cut_input(event)">
             <label for="cut_level">L</label><input type="number" id="cut_level" step="0.05" min="0" max="100" value="50" oninput="cut_input(event)">
             <label for="cut_cloud">Cloud only</label><input type="checkbox" id="cut_cloud" oninput="cut_input(event)"><br>
-            <!--<canvas id="cut_cnv" width="361" height="181" onmousedown="cut_mdown(event)" onmouseup="cut_mup(event)" onmouseout="cut_mup(event)" onmousemove="cut_input(event)"></canvas><br>-->
             <canvas id="cut_cnv" width="361" height="181" onmousedown="cut_mdown(event)" onmouseup="cut_mup(event)" onmousemove="cut_input(event)"></canvas><br>
             <input type="range" id="cut_range" step="0.05" min="0" max="100" oninput="cut_input(event)">
             <div style="text-align: left;font-size: small">Performance of mesh cut really benefits from a discrete graphics card</div>
