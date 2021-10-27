@@ -2,7 +2,7 @@ MeshView:
 ============================================================
 
 .. toctree::
-   :caption: QuickNII documentation
+   :caption: MeshView documentation
    :maxdepth: 3
 
    introduction
