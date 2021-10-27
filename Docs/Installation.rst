@@ -61,7 +61,7 @@ For reuse of the Waxholm Space atlas of the Sprague Dawley rat brain,see citatio
 https://www.nitrc.org/citation/?group_id=1081
 
 
-**Links:**
+**Links**
 ~~~~~~~~~~~~
 
 -Waxholm Space Atlas of the Sprague Dawley Rat Brain v2 (http://meshview-meshview.apps.hbp.eu/?atlas=WHS_SD_rat_atlas_v2) - hierarchical, 80 visible structures
