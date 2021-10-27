@@ -5,9 +5,7 @@ MeshView:
    :caption: QuickNII documentation
    :maxdepth: 3
 
-   Introduction
-   Installation
-   imageprepro
+   introduction
    support
    publications
  
