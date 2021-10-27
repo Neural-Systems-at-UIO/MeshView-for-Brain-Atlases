@@ -5,7 +5,8 @@ MeshView:
    :caption: MeshView documentation
    :maxdepth: 3
 
-   introduction
+   Introduction
+   Installation
    support
    publications
  
