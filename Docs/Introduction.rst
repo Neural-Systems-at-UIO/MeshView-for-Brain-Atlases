@@ -13,6 +13,4 @@ such as the Waxholm Space Atlas of the Sprague Dawley Rat Brain.
   - rendering point-clouds (simple type-in, or loaded from a JSON format which is typically obtained from the QUINT workflow)
   - coordinate system is compatible with QuickNII (https://www.nitrc.org/projects/quicknii)
 
-*Two atlases are provided with MeshView*:
-  - Waxholm Space Atlas of the Sprague Dawley rat brain, parcellation version 2 (generated from 39 μm resolution volume)
-  - Allen Mouse Brain Atlas reference atlas, CCFv3 parcellation from 2015 (generated from 25 μm resolution volume)
+
