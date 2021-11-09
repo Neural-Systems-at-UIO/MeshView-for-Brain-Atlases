@@ -1,4 +1,4 @@
 
-*Use coordinate lists*
+Use coordinate lists
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
