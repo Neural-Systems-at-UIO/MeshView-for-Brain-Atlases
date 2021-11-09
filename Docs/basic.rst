@@ -6,9 +6,11 @@
    :width: 6.30139in
    :height: 3.90833in
    
-   
-   
-   
+(1)  Allows scaling of the brain   
+(2)  Global control of all structures, using the slider will render
+     the meshes transparent or disappear   
+(3)  Individual control: each structure can be made transparent or
+     disappear  
    
    
    
