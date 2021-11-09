@@ -1,4 +1,4 @@
 
-Use coordinate lists
-^^^^^^^^^^^^^^^^^^^^^
+Use json input of coordinates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
