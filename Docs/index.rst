@@ -17,6 +17,6 @@ MeshView:
    :numbered:
    :maxdepth: 3
 
-basic usage
-cut controls
-displaying
+   basic usage
+   cut controls
+   displaying
