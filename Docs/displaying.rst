@@ -41,6 +41,10 @@ Use coordinate upload
 
 It is possible to upload coordinates directly as coordinate triplets
 
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image13.png
+   :width: 6.3in
+   :height: 3.16528in
 
-
-
+(15) The "browse" button will open a new window
+(16) Coordinate triplets of points can be pasted in the new window. Color of the points are chosen by appending the RGB color code above the coordinates
+(17) The clouds can be toggled
