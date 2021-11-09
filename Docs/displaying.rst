@@ -48,3 +48,5 @@ It is possible to upload coordinates directly as coordinate triplets
 (15) The "browse" button will open a new window
 (16) Coordinate triplets of points can be pasted in the new window. Color of the points are chosen by appending the RGB color code above the coordinates
 (17) The clouds can be toggled
+(18) Slider for the point size
+
