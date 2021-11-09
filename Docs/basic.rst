@@ -22,3 +22,6 @@
 (6)  Navigation in the hierarchy is possible by clicking on the region  
      names (grey boxes), this will collapse parts of the region tree.
   
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image3.png
+   :width: 6.30139in
+   :height: 3.90833in
