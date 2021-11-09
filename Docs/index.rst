@@ -18,5 +18,5 @@ MeshView:
    :maxdepth: 3
 
    basic 
-   cut controls
+   cut 
    displaying
