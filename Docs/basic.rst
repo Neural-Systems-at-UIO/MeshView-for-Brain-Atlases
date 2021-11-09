@@ -12,7 +12,9 @@
 (3)  Individual control: each structure can be made transparent or
      disappear  
    
-   
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image2.png
+   :width: 6.29861in
+   :height: 3.78194in   
    
    
    
