@@ -10,11 +10,7 @@ MeshView:
    support
    publications
  
-   
-   
-   
-   
-   
+  
    
 .. toctree::
    :caption: Operations
