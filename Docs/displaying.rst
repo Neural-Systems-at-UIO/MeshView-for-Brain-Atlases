@@ -36,4 +36,9 @@ Use json file obtained in the QUINT workflow
 (14) The brain region Meshes can be individually selected, made
      transparent or completely hidden.
    
-   
+ Use coordinate upload
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
