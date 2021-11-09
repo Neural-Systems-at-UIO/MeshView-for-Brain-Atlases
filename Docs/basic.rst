@@ -16,8 +16,9 @@
    :width: 6.29861in
    :height: 3.78194in   
    
-   
-   
-   
-
+(4)  Individual control: the color for each structure can be changed
+     when clicking on the colored square
+(5)  The color control panel: allow users to define their own colors   
+(6)  Navigation in the hierarchy is possible by clicking on the region  
+     names (grey boxes), this will collapse parts of the region tree.
   
