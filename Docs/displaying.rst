@@ -39,6 +39,8 @@ Use json file obtained in the QUINT workflow
 Use coordinate upload
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+It is possible to upload coordinates directly as coordinate triplets
+
 
 
 
