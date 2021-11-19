@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MeshView for Brain Atlases v0.8e</title>
+        <title>MeshView for Brain Atlases v0.8f</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <style>
@@ -33,30 +33,37 @@
                 overflow: hidden;
             }
             #meshpanel{
-                padding: 5px;
-                padding-right: 0;
+                margin-left: 5px;
+/*                padding: 5px;
+                padding-right: 0;*/
                 background: #F0F0FF;
                 width: 200px;
                 flex: none;
                 display: flex;
                 flex-direction: column;
                 overflow-x: hidden;
-                resize: horizontal;
+                /*resize: horizontal;*/
             }
             #global{
                 flex: none;
             }
             #tree{
                 flex: auto;
-                padding-right: 0.5em;
-                overflow-x: auto;
+                /*padding-right: 0.5em;*/
+                overflow-x: hidden;
                 overflow-y: scroll;
+                user-select: none;
+            }
+            .hsiz{
+                width: 10px;
+                background: grey;
+                cursor: ew-resize;
             }
             #spacer{
                 flex: auto;
             }
             #ptslist{
-                padding: 5px;
+                /*padding: 5px;*/
                 flex: none;
                 width: 150px;
                 background: #F0F0FF;
@@ -816,7 +823,8 @@
             function toggleCut(event){
                 cut_box.style.display=event.target.checked?"block":"none";
                 if(firstCut){
-                    cut_box.style.left=document.getElementById("meshpanel").offsetWidth+"px";
+//                    cut_box.style.left=document.getElementById("meshpanel").offsetWidth+"px";
+                    cut_box.style.left=document.getElementById("spacer").offsetLeft+"px";
                     cut_box.style.top=document.getElementById("meshpanel").offsetTop+"px";
                 }
                 firstCut=false;
@@ -973,9 +981,34 @@
                     alert("Sum Ting Wong says: "+e);
                 }
             }
+            
+            let sizedrag=false;
+            function hdrag1(event){
+                if(!sizedrag){
+                sizedrag={x1:event.offsetX};
+                console.log(sizedrag);
+            }
+            }
+            function hdrag2(event){
+                if(!sizedrag){
+                sizedrag={x2:event.target.offsetWidth-event.offsetX};
+                console.log(sizedrag);
+            }
+            }
+            function gmmove(event){
+                if(sizedrag){
+                    if(sizedrag.hasOwnProperty("x1"))
+                        console.log(document.getElementById("meshpanel").style.width=(event.clientX-sizedrag.x1-5)+"px");
+                    if(sizedrag.hasOwnProperty("x2"))
+                        console.log(document.getElementById("ptslist").style.width=(window.innerWidth-event.clientX-sizedrag.x2)+"px");
+                }
+            }
+            function gmup(event){
+                sizedrag=false;
+            }
         </script>
     </head>
-    <body onload="startup()">
+    <body onload="startup()" onmouseup="gmup(event)" onmousemove="gmmove(event)">
         <canvas id="cnv"></canvas>
         <div id="overlay">
             <div id="toprow">
@@ -991,11 +1024,10 @@
                 <div id="meshpanel">
                     <div id="global" style="display: flex">All:<input type="range" min="0" max="20" value="20" step="1" oninput="setGlobal(event)" style="width:100%"></div>
                     <ul id="tree"></ul>
-                    <div>
-                        <span style="float:right">Resize panel here =&gt;</span>
-                    </div>
                 </div>
+                <div id="hsiz1" class="hsiz" onmousedown="hdrag1(event)"></div>
                 <div id="spacer" onmousedown="mdown(event)" onmousemove="mmove(event)" onmouseup="mup(event)" onmouseout="mout(event)"></div>
+                <div id="hsiz2" class="hsiz" onmousedown="hdrag2(event)"></div>
                 <div id="ptslist"><table id="ptstable"></table></div>
             </div>
         </div>
