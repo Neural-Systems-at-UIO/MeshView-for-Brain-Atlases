@@ -1,0 +1,46 @@
+<canvas id="cnv"></canvas>
+<div id="overlay">
+    <div id="toprow">
+        Atlas: <span id="atlas"></span>.
+        <label for="scale">Scale:</label><input type="range" id="scale" min="1" max="10" value="3" oninput="redraw()">
+        <input type="checkbox" id="cut" onchange="toggleCut(event)"><label for="cut">Cut</label>
+        | Cloud: <input type="file" multiple accept="application/json" onchange="loadfiles(event)">
+        <button onclick="simple_open()">Cloud from coordinates</button>
+        <input type="range" id="psize" min="1" max="10" value="2" oninput="redraw()"><label for="psize">Point size</label>
+        <div id="counter" style="display:block;float:right"></div>
+    </div>
+    <div id="panels">
+        <div id="meshpanel">
+            <div id="global" style="display: flex">All:<input type="range" min="0" max="20" value="20" step="1" oninput="setGlobal(event)" style="width:100%"></div>
+            <ul id="tree"></ul>
+        </div>
+        <div id="hsiz1" class="hsiz" onmousedown="hdrag1(event)"></div>
+        <div id="spacer" onmousedown="mdown(event)" onmousemove="mmove(event)" onmouseup="mup(event)" onmouseout="mout(event)"></div>
+        <div id="hsiz2" class="hsiz" onmousedown="hdrag2(event)"></div>
+        <div id="ptslist"><table id="ptstable"></table></div>
+    </div>
+</div>
+<div id="cut_box">
+    <div id="cut_handle">Cut controls</div>
+    <hr>
+    <label for="cut_hrot">H</label><input type="number" id="cut_hrot" step="0.05" value="0" oninput="cut_input(event)">
+    <label for="cut_hrot">V</label><input type="number" id="cut_vrot" step="0.05" value="0" oninput="cut_input(event)">
+    <label for="cut_level">L</label><input type="number" id="cut_level" step="0.05" min="0" max="100" value="50" oninput="cut_input(event)">
+    <label for="cut_cloud">Cloud only</label><input type="checkbox" id="cut_cloud" oninput="cut_input(event)"><br>
+    <canvas id="cut_cnv" width="361" height="181" onmousedown="cut_mdown(event)" onmouseup="cut_mup(event)" onmousemove="cut_input(event)"></canvas><br>
+    <input type="range" id="cut_range" step="0.05" min="0" max="100" oninput="cut_input(event)">
+    <div style="text-align: left;font-size: small">Performance of mesh cut really benefits from a discrete graphics card</div>
+</div>
+<div id="simple_cloud">
+    <div id="cloud_handle">Coordinate listing</div>
+    <hr>
+    Block header:<input type="text" id="cloud_head" value="-------">
+    <textarea id="cloud_text" placeholder="One x,y,z triplet per row, separated by commas or spaces."></textarea>
+    Mirror x-axis
+    <input type="checkbox" onclick="WHS_flip.checked=ABA_flip.checked=false;flips.style.visibility=event.target.checked?'visible':'hidden'">
+    <span id="flips" style="visibility:hidden">
+        <input type="checkbox" id="ABA_flip" onclick="WHS_flip.checked=false"><label for="ABA_flip">ABA</label>
+        <input type="checkbox" id="WHS_flip" onclick="ABA_flip.checked=false"><label for="WHS_flip">WHS</label><br>
+    </span>
+    <button onclick="simple_add()">Add</button><button onclick="simple_close()">Cancel</button>
+</div>

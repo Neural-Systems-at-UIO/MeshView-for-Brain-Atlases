@@ -1,0 +1,148 @@
+html{
+    height: 100%;
+}
+body{
+    height: 100%;
+    margin: 0;
+}
+#cnv{
+    position: absolute;
+}
+#overlay{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#toprow{
+    padding: 5px;
+    flex: none;
+    background: #F0F0FF;
+}
+#panels{
+    flex: auto;
+    display: flex;
+    overflow: hidden;
+}
+#meshpanel{
+    margin-left: 5px;
+    /*                padding: 5px;
+                    padding-right: 0;*/
+    background: #F0F0FF;
+    width: 200px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    /*resize: horizontal;*/
+}
+#global{
+    flex: none;
+}
+#tree{
+    flex: auto;
+    /*padding-right: 0.5em;*/
+    overflow-x: hidden;
+    overflow-y: scroll;
+    user-select: none;
+}
+.hsiz{
+    width: 10px;
+    background: grey;
+    cursor: ew-resize;
+}
+#spacer{
+    flex: auto;
+}
+#ptslist{
+    /*padding: 5px;*/
+    flex: none;
+    width: 150px;
+    background: #F0F0FF;
+    overflow-y: scroll;
+}
+
+#cut_box{
+    width: 370px;
+    background: lightgray;
+    position: absolute;
+    user-select: none;
+    text-align: center;
+    display: none;
+}
+#cut_box>input[type=number]{
+    width: 50px;
+}
+#cut_handle{
+    cursor: move;
+    margin-top: 5px;
+    margin-bottom: -5px;
+}
+#cut_range{
+    width: 90%;
+}
+
+#simple_cloud{
+    position:absolute;
+    user-select: none;
+    width:300px;
+    background:lightgray;
+    text-align: center;
+    display: none;
+}
+#cloud_handle{
+    cursor: move;
+    margin-top: 5px;
+    margin-bottom: -5px;
+}
+#cloud_text{
+    width:280px;
+    height: 50vh;
+}
+
+ul{
+    padding-left: 1em;
+    list-style-type: none;
+}
+li{
+    position: relative;
+}
+.litem{
+    white-space: nowrap;
+}
+li.leaf::before{
+    content: "o";
+    position:absolute;
+    left:-1em;
+    top:3px;
+}
+li.open::before{
+    content: "v";
+    position:absolute;
+    left:-1em;
+    top:3px;
+}
+li.closed::before{
+    content: ">";
+    position:absolute;
+    left:-1em;
+    top:3px;
+}
+input[type=color]{
+    flex: none;
+    width: 1.5em;
+}
+input[type=color]::-moz-color-swatch{
+    border-style: none;
+}
+li > span > input[type=range]{
+    position:relative;
+    width: 4em;
+}
+li.mesh > span > input[type=range]{
+    top:2px;
+}
+li.nomesh > span > input[type=range]{
+    top:3px;
+}
