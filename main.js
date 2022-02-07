@@ -1,3 +1,4 @@
+var collab;
 var moz=navigator.userAgent.toLowerCase().indexOf('firefox')>-1;
 var atlasroot="WHS_SD_rat_atlas_v2";
 function startmv(){
@@ -15,15 +16,42 @@ function startmv(){
         }
     });
     init();
+    document.getElementById("atlas").innerText=atlasroot.replace(/_/g," ");
+
+    let remaphack={
+        "ABA_Mouse_CCFv3_2015_25um":"AMBA_CCFv3_2015_reduced",
+        "ABA_Mouse_CCFv3_2017_25um":"AMBA_CCFv3_2017_full",
+        "WHS_SD_Rat_v2_39um":"WHS_SD_rat_atlas_v2",
+        "WHS_SD_Rat_v3_39um":"WHS_SD_rat_atlas_v3",
+        "WHS_SD_Rat_v4_39um":"WHS_SD_rat_atlas_v4"
+    }[atlasroot];
+    if(remaphack)
+        atlasroot=remaphack;
+    
     var xhr=new XMLHttpRequest();
     xhr.open("GET",atlasroot+".json");
     xhr.responseType="json";
     xhr.onload=jsonready;
     xhr.send();
-    document.getElementById("atlas").innerText=atlasroot.replace(/_/g," ");
+
 
     if(opener!==null)
         openerThing();
+    if(collab){
+            var table=//points.length>0?document.getElementById("ptstable").innerHTML:
+                    "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
+            table+="<tr><td colspan='2' style='background-color:lightgray'>"+collab.filename+"</td></tr>";
+            collab.json.forEach(function(elem){
+                var idx=points.length;
+                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+                elem.r/=255;elem.g/=255;elem.b/=255;
+                var pts=new Points(elem);
+                pts.createBuffer(gl);
+                points.push(pts);
+            });
+            document.getElementById("ptstable").innerHTML=table;
+            redraw();
+    }
 }
 
 var atlas=new Map();
