@@ -68,7 +68,7 @@ header("Set-Cookie: bucket-bearer=$bearer; Secure; HttpOnly; SameSite=None");
                 let tbody=document.getElementById("bucket-content");
                 for(let item of bucket.objects)
 //                    if(item.content_type==="application/json")
-                    if(item.name.endsWith(".zip"))
+                    if(item.name && item.name.endsWith(".zip"))
                         tbody.innerHTML+="<tr><td><a href=\"#\" onclick=\"pick('"+item.name+"')\">"+item.name+"</a></td><td>"+item.bytes+"</td><td>"+item.last_modified+"</td></tr>";
             }
             async function pick(filename){
