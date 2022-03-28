@@ -5,9 +5,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
-            for(let setting of location.search.substring(1).split("&"))
+            let collab;
+            for(let setting of location.search.substring(1).split("&")){
                 document.cookie=setting+";samesite=none;secure";
-            location.href="https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=meshview&redirect_uri=https://meshview.apps.hbp.eu/token.php&scope=profile+email+team";
+                if(setting.startsWith("clb-collab-id"))
+                    collab=setting.substring(14);
+            }
+            location.href="https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=meshview&redirect_uri=https://meshview.apps.hbp.eu/token.php&scope=profile+email+team&state="+collab;
         </script>
     </head>
     <body>
