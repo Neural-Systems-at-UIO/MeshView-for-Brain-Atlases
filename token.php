@@ -116,7 +116,7 @@ header("Set-Cookie: bucket-bearer=$bearer; Secure; HttpOnly; SameSite=None", fal
         <?php if (!$compliant) { ?>
             <div style="background: red; left: 0px; right: 0px; margin: 5px">
                 <b>Warning: data loss detected, this web browser provides limited implementation of internet standards.</b><br>
-                While MeshView will probably start, things may break any time. Please consider using a standards-compliant web browser.
+                While there may be a list of files below, probably none of them will work. Please consider using a standards-compliant web browser.
             </div>
         <?php } ?>
         <table>
