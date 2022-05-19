@@ -116,13 +116,7 @@ header("Set-Cookie: bucket-bearer=$bearer; Secure; HttpOnly; SameSite=None", fal
     <body onload="startup()">
 
         <?php if (!$compliant) { ?>
-            <div class="breadcrumb_wrapper">
-            <nav class="breadcrumbs">
-            <a href="" class="breadcrumbs__item">Image Preview</a>
-            <a href="https://webalign.apps-dev.hbp.eu/index.html?clb-collab-id={{current_collab}}" class="breadcrumbs__item">WebAlign</a>
-            <a href="" class="breadcrumbs__item current" style="">Nutil</a>
-            <a href="https://meshview.apps.hbp.eu/collab.html?clb-collab-id={{current_collab}}" class="breadcrumbs__item">MeshView</a>
-            </nav></div>
+
             <div style="background: red; left: 0px; right: 0px; margin: 5px">
                 <b>Warning: data loss detected, this web browser provides limited implementation of internet standards.</b><br>
                 While there may be a list of files below, probably none of them will work. Please consider using a standards-compliant web browser.
@@ -130,6 +124,13 @@ header("Set-Cookie: bucket-bearer=$bearer; Secure; HttpOnly; SameSite=None", fal
         <?php } ?>
         <table>
             <thead>
+                <div class="breadcrumb_wrapper">
+                <nav class="breadcrumbs">
+                <a href="" class="breadcrumbs__item">Image Preview</a>
+                <a href="https://webalign.apps-dev.hbp.eu/index.html" class="breadcrumbs__item">WebAlign</a>
+                <a href="" class="breadcrumbs__item" style="">Nutil</a>
+                <a href="https://meshview.apps.hbp.eu/collab.html" class="breadcrumbs__item current">MeshView</a>
+                </nav></div>
                 <tr><th>Filename</th><th>Size</th><th>Modified</th></tr>
             </thead>
             <tbody id="bucket-content"></tbody>
