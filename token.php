@@ -127,9 +127,9 @@ header("Set-Cookie: bucket-bearer=$bearer; Secure; HttpOnly; SameSite=None", fal
                 <div class="breadcrumb_wrapper">
                 <nav class="breadcrumbs">
                 <a href="" class="breadcrumbs__item">Image Preview</a>
-                <a href="https://webalign.apps-dev.hbp.eu/index.html" class="breadcrumbs__item">WebAlign</a>
+                <a href="https://webalign.apps-dev.hbp.eu/index.html?clb-collab-id=<?php echo $collab;?>" class="breadcrumbs__item">WebAlign</a>
                 <a href="" class="breadcrumbs__item" style="">Nutil</a>
-                <a href="https://meshview.apps.hbp.eu/collab.html" class="breadcrumbs__item current">MeshView</a>
+                <a href="#" class="breadcrumbs__item current">MeshView</a>
                 </nav></div>
                 <tr><th>Filename</th><th>Size</th><th>Modified</th></tr>
             </thead>
