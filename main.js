@@ -631,7 +631,7 @@ function loadfiles(event)
     }
 }
 function openerThing(){
-    opener.postMessage("ready.");
+    opener.postMessage("ready.","*");
     onmessage=function(event){
             var data=event.data;
             var table=points.length>0?document.getElementById("ptstable").innerHTML:
