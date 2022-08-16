@@ -125,7 +125,7 @@ function jsonready(event){
     progress();
 }
 function progress(){
-    document.getElementById("counter").innerHTML=loaded+"/"+total;
+    document.getElementById("counter").innerHTML=loaded!==total?loaded+"/"+total:"";
 }
 function doColor(event){
     event.target.style="background-color:"+event.target.value;
@@ -874,4 +874,7 @@ function gmmove(event){
 }
 function gmup(event){
     sizedrag=false;
+}
+function help(){
+    window.open("https://meshview-for-brain-atlases.readthedocs.io/en/latest/",Date.now());
 }

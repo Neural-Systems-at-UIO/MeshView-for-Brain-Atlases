@@ -7,7 +7,7 @@
         | Cloud: <input type="file" multiple accept="application/json" onchange="loadfiles(event)">
         <button onclick="simple_open()">Cloud from coordinates</button>
         <input type="range" id="psize" min="1" max="10" value="2" oninput="redraw()"><label for="psize">Point size</label>
-        <div id="counter" style="display:block;float:right"></div>
+        <button style="float:right" onclick="help()">?</button><div style="display:block;float:right">&nbsp;</div><div id="counter" style="display:block;float:right"></div>
     </div>
     <div id="panels">
         <div id="meshpanel">
