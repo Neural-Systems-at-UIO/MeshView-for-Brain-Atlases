@@ -7,11 +7,14 @@ rodent brain.MeshView is a web application
 for real-time 3D display of surface mesh data representing structural parcellations from volumetric atlases,
 such as the Waxholm Space Atlas of the Sprague Dawley Rat Brain.
 
+
+
 .. image:: 483026fbdc47496f8b140360f8bcbb0c/media/QUINTpoint cloud.png
    :width: 6.3in
    :height: 4.04916in 
    
-
+   
+   
 *Key features*:
   - orbiting view with toggleable opaque/transparent/hidden parcellation meshes
   - rendering user defined cut surface as if meshes were solid objects
