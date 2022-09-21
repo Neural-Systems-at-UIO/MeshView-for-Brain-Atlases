@@ -9,7 +9,7 @@ such as the Waxholm Space Atlas of the Sprague Dawley Rat Brain.
 
 
 .. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image17.png
-   :width: 6.12083in
+   :width: 5.12083in
    :height: 3.44028in
    
    
