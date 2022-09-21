@@ -79,5 +79,7 @@ https://www.nitrc.org/citation/?group_id=1081
 **Release notes**
 ~~~~~~~~~~~~~~~~~~
 
+Current version: MeshView 0.8h
+
 
 
