@@ -11,6 +11,9 @@ such as the Waxholm Space Atlas of the Sprague Dawley Rat Brain.
   - orbiting view with toggleable opaque/transparent/hidden parcellation meshes
   - rendering user defined cut surface as if meshes were solid objects
   - rendering point-clouds (simple type-in, or loaded from a JSON format which is typically obtained from the nutil tool in the QUINT workflow)
-  - coordinate system is compatible with QuickNII (https://www.nitrc.org/projects/quicknii)
+  - coordinate system is compatible with QuickNII (https://quicknii.readthedocs.io)
 
-
+.. tip:: 
+   **MeshView can be used to visualize output from the QUINT workflow**
+   
+   Visit `EBRAINS <https://ebrains.eu/service/quint/>`_ for more information about QUINT. Find full user documentation `here <https://quint-workflow.readthedocs.io>`_. 
