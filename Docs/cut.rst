@@ -1,6 +1,6 @@
 **Cut controls**
 -------------------
-
+The brain meshes will be cut when they are fully-opaque but will disappear if set to semi-transparent. Point clouds can also be cut when present by selecting the "Cloud only" button (see more details in the Point cloud section).
 
 .. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image4.png
    :width: 6.30139in
