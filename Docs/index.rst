@@ -18,8 +18,8 @@ MeshView:
    :maxdepth: 3
 
    basic 
+   cut
    displaying
-   cut 
    FAQ
    
    
