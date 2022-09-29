@@ -50,3 +50,15 @@ It is possible to upload coordinates directly as coordinate triplets
 (17) The clouds can be toggled
 (18) Slider for the point size
 
+Cutting point clouds
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Point clouds can be cut when choosing the option "Cloud only" in the cut window.
+
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image17.png
+   :width: 6.3in
+   :height: 3.16528in
+   
+   
+   
+
+
