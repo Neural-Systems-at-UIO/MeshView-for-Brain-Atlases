@@ -18,9 +18,9 @@ MeshView:
    :maxdepth: 3
 
    basic 
+   coordinates
    cut 
    displaying
-   coordinates
    FAQ
    
    
