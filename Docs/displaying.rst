@@ -59,6 +59,9 @@ Point clouds can be cut when choosing the option "Cloud only" in the cut window.
    :height: 3.16528in
    
    
+ The atlas meshes can be visualized but will not be cut  
+
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image18.png
+   :width: 6.3in
+   :height: 3.16528in
    
-
-
