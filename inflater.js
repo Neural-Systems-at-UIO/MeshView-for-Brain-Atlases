@@ -1,4 +1,4 @@
-function inflate(data, approx) {
+function inflate(data, readpos, approx) {
     if(!inflate.basehuff){
         let addseq=(list,from,to)=>{
             while(from<=to)
@@ -12,9 +12,12 @@ function inflate(data, approx) {
         inflate.basehuff=huff(baserake);
     }
     
+    if (!readpos)
+        readpos = 0;
+    else
+        readpos *= 8;
     if (!approx)
         approx = data.length;
-    let readpos = 0;
     let result = new Uint8Array(approx);
     let writepos = 0;
 

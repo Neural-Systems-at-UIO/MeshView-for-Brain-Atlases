@@ -33,47 +33,32 @@ $json["token"]=$token;
         <script src="shaders.js"></script>
         <script src="matrix.js"></script>
         <script src="main.js"></script>
-        <script src="unzip.js"></script>
+        <script src="dppick.js"></script>
+        <script src="netunzip.js"></script>
         <script src="inflater.js"></script>
         <script>
-            let bucket=<?php
-            $ch = curl_init(getenv("ebrains_bucket") . $json["clb-collab-id"] . "?delimiter=/");
-            curl_setopt_array($ch, array(
-                CURLOPT_HTTPHEADER => array(
-                    "Accept: application/json",
-                    "Authorization: Bearer " . $token
-                )
-            ));
-            $res = curl_exec($ch);
-            curl_close($ch);
-            ?>;
-            let state=<?php echo json_encode($json);?>;
-            function startup(){
-                let tbody=document.getElementById("bucket-content");
-                for(let item of bucket.objects)
-                    if(item.name && item.name.endsWith(".zip"))
-                        tbody.innerHTML+="<tr><td><a href=\"#\" onclick=\"pick('"+item.name+"')\">"+item.name+"</a></td><td>"+item.bytes+"</td><td>"+item.last_modified+"</td></tr>";
-            }
-            async function pick(filename){
-                let json,label;
-                
-                let download=await fetch("bucket.php?"+encodeURIComponent(JSON.stringify({
-                    collab:state["clb-collab-id"],
+            const state=<?php echo json_encode($json);?>;
+            const td=new TextDecoder();
+            async function startup(){
+                const choice=await dppick({
+                    bucket:state["clb-collab-id"],
                     token:state.token,
-                    filename
-                }))).then(response=>response.json());
-                let zipfile=await fetch(download.url).then(response=>response.arrayBuffer());
-                
-                const ziplen = zipfile.byteLength;
-                console.log(ziplen);
-                const dec=new TextDecoder();
-                unzip(zipfile,(name,csize,ucsize,deflated)=>{
-                    if(name.endsWith("combined.json"))
-                        json=JSON.parse(dec.decode(inflate(deflated)));
-                    else if(name.endsWith("nutil.nut"))
-                        label=dec.decode(inflate(deflated)).match(/label_file = (.*)/m)[1];
+                    title:"Select Nutil result file",
+                    extensions:[".zip"],
+                    nocancel:true
                 });
-
+                const zipdir=await netunzip(
+                    async()=>fetch(
+                        `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${choice.pick}?redirect=false`,
+                        {headers: {Authorization: `Bearer ${state.token}`}})
+                    .then(response => response.json()).then(json => json.url));
+                let json,label;
+                for(const [_, entry] of zipdir.entries){
+                    if(entry.name.endsWith("combined.json"))
+                        json=JSON.parse(td.decode(await zipdir.get(entry)));
+                    if(entry.name.endsWith("nutil.nut"))
+                        label=td.decode(await zipdir.get(entry)).match(/label_file = (.*)/m)[1];
+                }
                 label={
                     "Allen Mouse Brain 2015":"ABA_Mouse_CCFv3_2015_25um",
                     "Allen Mouse Brain 2017":"ABA_Mouse_CCFv3_2017_25um",
@@ -84,20 +69,15 @@ $json["token"]=$token;
                 if(label && json){
                     atlasroot=label;
                     document.body.innerHTML=await fetch("body.html").then(response=>response.text());
-                    collab={filename,json};
+                    collab={filename:choice.pick,json};
                     startmv();
                 }else{
-                    alert("Please select a Nutil result file.");
+                    alert(choice.pick+" does not contain MeshView point cloud.");
+                    startup();
                 }
             }
         </script>
     </head>
     <body onload="startup()">
-        <table>
-            <thead>
-                <tr><th>Filename</th><th>Size</th><th>Modified</th></tr>
-            </thead>
-            <tbody id="bucket-content"></tbody>
-        </table>
     </body>
 </html>
