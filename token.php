@@ -40,6 +40,8 @@ $json["token"]=$token;
             const state=<?php echo json_encode($json);?>;
             const td=new TextDecoder();
             async function startup(){
+                const pre=document.getElementsByTagName("pre")[0];
+                pre.innerText="";
                 const choice=await dppick({
                     bucket:state["clb-collab-id"],
                     token:state.token,
@@ -47,17 +49,32 @@ $json["token"]=$token;
                     extensions:[".zip"],
                     nocancel:true
                 });
+                let phase=0;
+                let msg=`Opening ${choice.pick} `;
+                const spinner=setInterval(()=>{
+                    pre.innerText=msg+("-\\|/".charAt(phase++));
+                    phase&=3;
+                },20);
                 const zipdir=await netunzip(
                     async()=>fetch(
                         `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${choice.pick}?redirect=false`,
                         {headers: {Authorization: `Bearer ${state.token}`}})
-                    .then(response => response.json()).then(json => json.url));
+                    .then(response => response.json()).then(json => json.url)).catch(ex=>{
+                        clearInterval(spinner);
+                        alert(ex);
+                        startup();
+                    });
+                if(!zipdir)return;
                 let json,label;
                 for(const [_, entry] of zipdir.entries){
-                    if(entry.name.endsWith("combined.json"))
+                    if(entry.name.endsWith("combined.json")){
+                        msg+="\nCombined JSON found ";
                         json=JSON.parse(td.decode(await zipdir.get(entry)));
-                    if(entry.name.endsWith("nutil.nut"))
+                    }
+                    if(entry.name.endsWith("nutil.nut")){
+                        msg+="\nNutil configuration found ";
                         label=td.decode(await zipdir.get(entry)).match(/label_file = (.*)/m)[1];
+                    }
                 }
                 label={
                     "Allen Mouse Brain 2015":"ABA_Mouse_CCFv3_2015_25um",
@@ -67,11 +84,14 @@ $json["token"]=$token;
                     "WHS Atlas Rat v4":"WHS_SD_Rat_v4_39um"
                 }[label];
                 if(label && json){
+                    msg+="\nStarting MeshView ";
                     atlasroot=label;
                     document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                     collab={filename:choice.pick,json};
+                    clearInterval(spinner);
                     startmv();
                 }else{
+                    clearInterval(spinner);
                     alert(choice.pick+" does not contain MeshView point cloud.");
                     startup();
                 }
@@ -79,5 +99,6 @@ $json["token"]=$token;
         </script>
     </head>
     <body onload="startup()">
+        <pre></pre>
     </body>
 </html>
