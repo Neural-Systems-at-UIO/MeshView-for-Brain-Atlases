@@ -85,7 +85,7 @@ $json["token"]=$token;
                 }[label];
                 if(label && json){
                     msg+="\nStarting MeshView ";
-                    atlasroot=label;
+                    atlasroot=atlasorg=label;
                     document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                     collab={filename:choice.pick,json};
                     clearInterval(spinner);
