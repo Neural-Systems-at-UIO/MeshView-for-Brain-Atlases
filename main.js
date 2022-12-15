@@ -1,6 +1,7 @@
 var collab;
 var moz=navigator.userAgent.toLowerCase().indexOf('firefox')>-1;
 var atlasroot="WHS_SD_rat_atlas_v2";
+var atlasorg="WHS_SD_Rat_v2_39um";
 function startmv(){
     document.body.onmouseup=gmup;
     document.body.onmousemove=gmmove;
@@ -10,13 +11,13 @@ function startmv(){
     location.search.slice(1).split("&").forEach(function(pair){
         if(pair.length===0)return;
         var parts=pair.split("=");
-        if(parts[0]==="atlas")atlasroot=parts[1];
+        if(parts[0]==="atlas")atlasroot=atlasorg=parts[1];
         else if(parts[0]==="cloud"){
             autoload(parts[1]);
         }
     });
     init();
-    document.getElementById("atlas").innerText=atlasroot.replace(/_/g," ");
+    document.getElementById("atlas").innerText=atlasorg.replace(/_/g," ");
 
     let remaphack={
         "ABA_Mouse_CCFv3_2015_25um":"AMBA_CCFv3_2015_reduced",
@@ -480,7 +481,7 @@ function cutMesh(flatrf,flatnrm,cx,cy,cz,sx,sy,sz){
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
     atlas.forEach(function(elem){
-        if(elem.mesh && elem.a===1){
+        if(elem.mesh && elem.a>0){
             gl.uniform3f(color,elem.r,elem.g,elem.b);
             elem.mesh.drawElements(gl,coords,normals);
         }
@@ -514,7 +515,7 @@ function cutSurface(flatrf,nrm,cx,cy,cz,sx,sy,sz){
     gl.stencilMask(1);
 
     atlas.forEach(function(elem){
-        if(elem.mesh && elem.a===1){
+        if(elem.mesh && elem.a>0){
             gl.uniform3f(color,elem.r,elem.g,elem.b);
 
             gl.clear(gl.STENCIL_BUFFER_BIT);
@@ -886,7 +887,7 @@ function screenshot(){
         let url=URL.createObjectURL(blob);
         let a=document.createElement("a");
         a.href=url;
-        a.download=atlasroot+"_"+new Date().toISOString().replace(/:/g,"_")+".png";
+        a.download=atlasorg+"_"+new Date().toISOString().replace(/[:.]/g,"-")+".png";
         a.click();
         URL.revokeObjectURL(url);
     });
