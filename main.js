@@ -160,7 +160,6 @@ function init(){
     cnv.height=window.innerHeight-1;
 
     gl=cnv.getContext("webgl",{stencil:true,alpha:false/*,premultipliedAlpha:false*/});
-    gl.clearColor(1,1,1,1);
 
     progs=buildshaders(gl);
 
@@ -271,6 +270,8 @@ function draw(){
         }
     });
 
+    const clearColor=parseInt(document.getElementById("bgcolor").value.slice(-6),16);
+    gl.clearColor((clearColor>>>16)/255,((clearColor>>8)&255)/255,(clearColor&255)/255,1);
     gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 
     if(nomesh)return;
@@ -877,4 +878,16 @@ function gmup(event){
 }
 function help(){
     window.open("https://meshview-for-brain-atlases.readthedocs.io/en/latest/",Date.now());
+}
+
+function screenshot(){
+    draw();
+    document.getElementById("cnv").toBlob(blob=>{
+        let url=URL.createObjectURL(blob);
+        let a=document.createElement("a");
+        a.href=url;
+        a.download=atlasroot+"_"+new Date().toISOString().replace(/:/g,"_")+".png";
+        a.click();
+        URL.revokeObjectURL(url);
+    });
 }
