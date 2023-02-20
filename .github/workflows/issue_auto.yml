@@ -1,0 +1,21 @@
+name: Issue management
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  do-things:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-assign issue
+        uses: pozil/auto-assign-issue@v1.5.0
+        with:
+          assignees: Tevemadar
+          numOfAssignee: 1
+          allowSelfAssign: true
+      - name: Add issue to project
+        uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/Neural-Systems-at-UIO/projects/2
+          github-token: ${{ secrets.AUTOMATION_TOKEN }}
