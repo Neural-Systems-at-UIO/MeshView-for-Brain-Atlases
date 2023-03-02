@@ -8,8 +8,8 @@ for real-time 3D display of surface mesh data representing structural parcellati
 such as the Waxholm Space Atlas of the Sprague Dawley Rat Brain.
 
 
-.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image17.png
-   :width: 5.12083in
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image16.png
+   :width: 8.12083in
    :height: 3.44028in
    
    
