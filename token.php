@@ -45,10 +45,35 @@ $json["token"]=$token;
                 const choice=await dppick({
                     bucket:state["clb-collab-id"],
                     token:state.token,
-                    title:"Select Nutil result file",
-                    extensions:[".zip"],
+                    title:"Select Nutil result pack or LocaliZoom file",
+                    extensions:[".zip",".lz"],
                     nocancel:true
                 });
+                if(choice.pick.endsWith(".lz")){
+                    const lz=await fetch(
+                        `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${choice.pick}?redirect=false`,
+                        {headers: {Authorization: `Bearer ${state.token}`}})
+                                .then(response=>response.json())
+                                .then(json=>fetch(json.url))
+                                .then(response=>response.json());
+                    const json=[];
+                    debugger;
+                    for(const section of lz.sections)
+                        if(section.ouv && section.poi) { // todo: propagation, nonlin
+                            const {filename,ouv,poi}=section;
+                            const triplets=poi.flatMap(p2d=>[
+                                ouv[0]+p2d.x*ouv[3]/section.width+p2d.y*ouv[6]/section.height,
+                                ouv[1]+p2d.x*ouv[4]/section.width+p2d.y*ouv[7]/section.height,
+                                ouv[2]+p2d.x*ouv[5]/section.width+p2d.y*ouv[8]/section.height
+                            ]);
+                            json.push({name:filename,r:0,g:0,b:0,triplets});
+                        }
+                    atlasroot=atlasorg=lz.atlas;
+                    document.body.innerHTML=await fetch("body.html").then(response=>response.text());
+                    collab={filename:choice.pick,json};
+                    startmv();
+                    return;
+                }
                 let phase=0;
                 let msg=`Opening ${choice.pick} `;
                 const spinner=setInterval(()=>{
