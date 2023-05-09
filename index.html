@@ -12,7 +12,12 @@
         <script src="main.js"></script>
         <script>
             if(location.search.indexOf("mode=pointblock")!==-1)
-                location.href="https://www.nesys.uio.no/MeshView/meshviewy.html"+location.search.replace("AMBA_CCF","ABA_mouse_");
+                location.href="https://www.nesys.uio.no/MeshView/meshviewy.html"+location.search
+                    .replace("ABA_Mouse_CCFv3_2015_25um","ABA_mouse_v3")
+                    .replace("ABA_Mouse_CCFv3_2017_25um","ABA_mouse_v3_2017_full")
+                    .replace("WHS_SD_Rat_v2_39um","WHS_SD_rat_atlas_v2")
+                    .replace("WHS_SD_Rat_v3_39um","WHS_SD_rat_atlas_v3")
+                    .replace("WHS_SD_Rat_v4_39um","WHS_SD_rat_atlas_v4");
             async function startup(){
                 document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                 startmv();
