@@ -11,6 +11,8 @@
         <script src="matrix.js"></script>
         <script src="main.js"></script>
         <script>
+            if(location.search.indexOf("mode=pointblock")!==-1)
+                location.href="https://www.nesys.uio.no/MeshView/meshviewy.html"+location.search.replace("AMBA_CCF","ABA_mouse_");
             async function startup(){
                 document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                 startmv();
