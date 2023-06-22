@@ -50,6 +50,12 @@ It is possible to upload coordinates directly as coordinate triplets
 (17) The clouds can be toggled
 (18) Slider for the point size
 
+Opening LocaliZoom files in the EBRAINS collab
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+MeshView can open annotations from LocaliZoom files saved in the storage Bucket (.lz files) 
+For more informatiojn, see:  https://wiki.ebrains.eu/bin/view/Collabs/image-registration-and-analysis-demo/1.%20Create%20your%20own%20working%20space/
+
+
 Cutting point clouds
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Point clouds can be cut when choosing the option "Cloud only" in the cut window.
