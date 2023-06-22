@@ -53,7 +53,8 @@ It is possible to upload coordinates directly as coordinate triplets
 Opening LocaliZoom files in the EBRAINS collab
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 MeshView can open annotations from LocaliZoom files saved in the storage Bucket (.lz files) 
-For more informatiojn, see:  https://wiki.ebrains.eu/bin/view/Collabs/image-registration-and-analysis-demo/1.%20Create%20your%20own%20working%20space/
+The "screenshot" button allows to capture the main window view as a png file.
+For more information, see:  https://wiki.ebrains.eu/bin/view/Collabs/image-registration-and-analysis-demo/1.%20Create%20your%20own%20working%20space/
 
 .. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image19.png
    :width: 6.3in
