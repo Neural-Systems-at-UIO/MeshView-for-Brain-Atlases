@@ -59,6 +59,7 @@ For more informatiojn, see:  https://wiki.ebrains.eu/bin/view/Collabs/image-regi
    :width: 6.3in
    :height: 3.16528in
 
+
 Cutting point clouds
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Point clouds can be cut when choosing the option "Cloud only" in the cut window.
