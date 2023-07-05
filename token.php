@@ -57,7 +57,7 @@ $json["token"]=$token;
                                 .then(json=>fetch(json.url))
                                 .then(response=>response.json());
                     const json=[];
-                    debugger;
+                    //debugger;
                     for(const section of lz.sections)
                         if(section.ouv && section.poi) { // todo: propagation, nonlin
                             const {filename,ouv,poi}=section;

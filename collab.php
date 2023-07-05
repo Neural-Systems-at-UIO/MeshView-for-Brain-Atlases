@@ -10,7 +10,7 @@
                 let [key,value]=setting.split("=");
                 state[key]=value;
             }
-            location.href="https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=meshview&redirect_uri=https://meshview.apps.hbp.eu/token.php&scope=profile+email+team+roles&state="+encodeURIComponent(JSON.stringify(state));
+            location.href="<?php echo getenv("ebrains_auth");?>?response_type=code&login=true&client_id=<?php echo getenv("ebrains_id_mv");?>&redirect_uri=<?php echo getenv("ebrains_redirect_mv");?>&scope=profile+email+team+roles&state="+encodeURIComponent(JSON.stringify(state));
         </script>
     </head>
     <body>
