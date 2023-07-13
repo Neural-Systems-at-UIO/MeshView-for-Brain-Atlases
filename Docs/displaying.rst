@@ -82,16 +82,27 @@ We have created customized versions of MeshView for working in specific brain re
 
 MeshView double cut mouse atlas links:
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_CPuL&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_CPuR&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_full&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_hindbrain&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_L&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_Lh&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_R&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_Rh&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_SCL&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_SCR&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_ThalL&mode=pointblock
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_ThalR&mode=pointblock
 
 MeshView double cut rat atlas link:
