@@ -81,31 +81,42 @@ MeshView with double cut feature
 We have created customized versions of MeshView for working in specific brain regions and allowing the 3D point clouds to be cut from two directions. This function was used in the data descriptor paper by Øvsthus et al. 2023 (manuscript). Briefly, multiple point clouds representing the cortico-pontine projections in rat and mouse were generated and used to study the topographical distribution of these connections. By cutting the 3D point clouds in thin slices, the spatial distribution was revealed (see figure)
 
 MeshView double cut mouse atlas links:
+----------------------------------------
+
+https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_full&mode=pointblock
+
+https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_L&mode=pointblock
+
+https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_R&mode=pointblock
+
+Caudoputamen:
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_CPuL&mode=pointblock
 
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_CPuR&mode=pointblock
 
-https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_full&mode=pointblock
+Hindbrain:
 
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_hindbrain&mode=pointblock
 
-https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_L&mode=pointblock
-
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_Lh&mode=pointblock
 
-https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_R&mode=pointblock
-
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_Rh&mode=pointblock
+
+Superior colliculus:
 
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_SCL&mode=pointblock
 
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_SCR&mode=pointblock
 
+Thalamus:
+
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_ThalL&mode=pointblock
 
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_ThalR&mode=pointblock
 
-MeshView double cut rat atlas link:
 
+MeshView double cut rat atlas link:
+----------------------------------------
 
 
