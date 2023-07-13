@@ -115,7 +115,10 @@ https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_ThalL&mode=pointblock
 https://meshview.apps.hbp.eu/?atlas=ABA_mouse_v3_2017_ThalR&mode=pointblock
 
 
+
 MeshView double cut rat atlas link:
-----------------------------------------
+
+https://meshview.apps.hbp.eu/?atlas=WHS_SD_Rat_v4_39um&mode=pointblock
+
 
 
