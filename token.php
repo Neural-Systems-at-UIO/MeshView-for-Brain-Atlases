@@ -36,6 +36,7 @@ $json["token"]=$token;
         <script src="dppick.js"></script>
         <script src="netunzip.js"></script>
         <script src="inflater.js"></script>
+        <script src="cloudloaders.js"></script>
         <script>
             const state=<?php echo json_encode($json);?>;
             const td=new TextDecoder();
@@ -50,27 +51,10 @@ $json["token"]=$token;
                     nocancel:true
                 });
                 if(choice.pick.endsWith(".lz")){
-                    const lz=await fetch(
-                        `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${choice.pick}?redirect=false`,
-                        {headers: {Authorization: `Bearer ${state.token}`}})
-                                .then(response=>response.json())
-                                .then(json=>fetch(json.url))
-                                .then(response=>response.json());
-                    const json=[];
-                    //debugger;
-                    for(const section of lz.sections)
-                        if(section.ouv && section.poi) { // todo: propagation, nonlin
-                            const {filename,ouv,poi}=section;
-                            const triplets=poi.flatMap(p2d=>[
-                                ouv[0]+p2d.x*ouv[3]/section.width+p2d.y*ouv[6]/section.height,
-                                ouv[1]+p2d.x*ouv[4]/section.width+p2d.y*ouv[7]/section.height,
-                                ouv[2]+p2d.x*ouv[5]/section.width+p2d.y*ouv[8]/section.height
-                            ]);
-                            json.push({name:filename,r:0,g:0,b:0,triplets});
-                        }
-                    atlasroot=atlasorg=lz.atlas;
+                    const data=await loadlz(choice.pick);
+                    atlasroot=atlasorg=data.lz.atlas;
                     document.body.innerHTML=await fetch("body.html").then(response=>response.text());
-                    collab={filename:choice.pick,json};
+                    collab={filename:data.filename,json:data.cloud};
                     startmv();
                     return;
                 }
