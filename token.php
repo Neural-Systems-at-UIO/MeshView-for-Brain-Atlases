@@ -39,7 +39,6 @@ $json["token"]=$token;
         <script src="cloudloaders.js"></script>
         <script>
             const state=<?php echo json_encode($json);?>;
-            const td=new TextDecoder();
             async function startup(){
                 const pre=document.getElementsByTagName("pre")[0];
                 pre.innerText="";
@@ -58,33 +57,7 @@ $json["token"]=$token;
                     startmv();
                     return;
                 }
-                let phase=0;
-                let msg=`Opening ${choice.pick} `;
-                const spinner=setInterval(()=>{
-                    pre.innerText=msg+("-\\|/".charAt(phase++));
-                    phase&=3;
-                },20);
-                const zipdir=await netunzip(
-                    async()=>fetch(
-                        `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${choice.pick}?redirect=false`,
-                        {headers: {Authorization: `Bearer ${state.token}`}})
-                    .then(response => response.json()).then(json => json.url)).catch(ex=>{
-                        clearInterval(spinner);
-                        alert(ex);
-                        startup();
-                    });
-                if(!zipdir)return;
-                let json,label;
-                for(const [_, entry] of zipdir.entries){
-                    if(entry.name.endsWith("combined.json")){
-                        msg+="\nCombined JSON found ";
-                        json=JSON.parse(td.decode(await zipdir.get(entry)));
-                    }
-                    if(entry.name.endsWith("nutil.nut")){
-                        msg+="\nNutil configuration found ";
-                        label=td.decode(await zipdir.get(entry)).match(/label_file = (.*)/m)[1];
-                    }
-                }
+                let {label,json,update,stop}=await loadzip(choice.pick,pre);
                 label={
                     "Allen Mouse Brain 2015":"ABA_Mouse_CCFv3_2015_25um",
                     "Allen Mouse Brain 2017":"ABA_Mouse_CCFv3_2017_25um",
@@ -93,16 +66,20 @@ $json["token"]=$token;
                     "WHS Atlas Rat v4":"WHS_SD_Rat_v4_39um"
                 }[label];
                 if(label && json){
-                    msg+="\nStarting MeshView ";
+                    update("Starting MeshView ");
                     atlasroot=atlasorg=label;
                     document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                     collab={filename:choice.pick,json};
-                    clearInterval(spinner);
+                    stop();
                     startmv();
                 }else{
-                    clearInterval(spinner);
-                    alert(choice.pick+" does not contain MeshView point cloud.");
-                    startup();
+                    stop();
+                    requestAnimationFrame(()=>{
+                        requestAnimationFrame(()=>{
+                            alert(choice.pick+" does not contain MeshView point cloud.");
+                            startup();
+                        });
+                    });
                 }
             }
         </script>

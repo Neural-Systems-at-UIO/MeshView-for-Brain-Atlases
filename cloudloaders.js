@@ -19,3 +19,41 @@ async function loadlz(filename) {
         }
     return {filename, lz, cloud};
 }
+
+async function loadzip(filename, pre) {
+    let phase = 0;
+    let msg = `Opening ${filename} `;
+    const spinner = setInterval(() => {
+        pre.innerText = msg + ("-\\|/".charAt(phase++));
+        phase &= 3;
+    }, 20);
+    const update = line => msg += `\n${line}`;
+    const stop = () => {
+        clearInterval(spinner);
+        pre.innerText = msg;
+    };
+    const zipdir = await netunzip(
+            async() => fetch(
+                `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${filename}?redirect=false`,
+                {headers: {Authorization: `Bearer ${state.token}`}})
+                .then(response => response.json()).then(json => json.url)).catch(ex => {
+        update(ex);
+    });
+    if (!zipdir)
+        return{stop};
+    const td = new TextDecoder();
+    let json, label;
+    for (const [_, entry] of zipdir.entries) {
+        if (entry.name.endsWith("combined.json")) {
+            update("Combined JSON found ");
+            json = JSON.parse(td.decode(await zipdir.get(entry)));
+        }
+        if (entry.name.endsWith("nutil.nut")) {
+            update("Nutil configuration found ");
+            label = td.decode(await zipdir.get(entry)).match(/label_file = (.*)/m)[1];
+        }
+    }
+    if (label && json)
+        return {label, json, update, stop};
+    return{stop};
+}
