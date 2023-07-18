@@ -39,6 +39,7 @@ function startmv(){
     if(opener!==null)
         openerThing();
     if(collab){
+            document.getElementById("cloud_standalone").style.display="none";
             var table=//points.length>0?document.getElementById("ptstable").innerHTML:
                     "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
             table+="<tr><td colspan='2' style='background-color:lightgray'>"+collab.filename+"</td></tr>";
@@ -52,6 +53,8 @@ function startmv(){
             });
             document.getElementById("ptstable").innerHTML=table;
             redraw();
+    } else {
+            document.getElementById("cloud_collab").style.display="none";
     }
 }
 
