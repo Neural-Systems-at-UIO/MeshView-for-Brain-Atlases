@@ -3,11 +3,11 @@
 **System requirements**
 ~~~~~~~~~~~~~~~~~~~~~~~~
 Web application for realtime 3D display of mesh-data representing structural parcellations, and generation of user defined cut planes. 
-Any web browser can be used
+Any web browser can be used.
 
 **Technical information**
 
-comming soon
+WebAlign can be used directly (see links further down) but is also available as a webservice on EBRAINS. Please consult these page if you want to analyse your our data and generate point clouds representing your data: https://www.ebrains.eu/brain-atlases/analysis/image-annotation-and-export-of-coordinate-points; https://www.ebrains.eu/brain-atlases/analysis/labelled-features-analysis.
 
 **Conditions of use**
 ~~~~~~~~~~~~~~~~~~~~~~
