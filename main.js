@@ -856,6 +856,44 @@ function simple_add(){
     }
 }
 
+async function collab_open() {
+    const {cancel,pick}=await dppick({
+        bucket:state["clb-collab-id"],
+        token:state.token,
+        title:"Select Nutil result pack or LocaliZoom file",
+        extensions:[".zip",".lz"]
+    });
+    if(cancel)
+        return;
+    let cloud=[];
+    if(pick.endsWith(".lz")) {
+        ({cloud}=await loadlz(pick));
+        //atlasroot=atlasorg=data.lz.atlas;
+    } else {
+        const cstyle=document.getElementById("consolediv").style;
+        cstyle.display="block";
+        const cpre=document.getElementById("consolepre");
+        const {label,json,update,stop}=await loadzip(pick,cpre);
+        stop();
+        cloud=json;
+        cstyle.display="none";
+    }
+    if(cloud.length) {
+        let table=document.getElementById("ptstable").innerHTML;
+        table+="<tr><td colspan='2' style='background-color:lightgray'>"+pick+"</td></tr>";
+        for(const elem of cloud) {
+            const idx=points.length;
+            table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+            elem.r/=255;elem.g/=255;elem.b/=255;
+            const pts=new Points(elem);
+            pts.createBuffer(gl);
+            points.push(pts);
+        };
+        document.getElementById("ptstable").innerHTML=table;
+        redraw();
+    }
+}
+
 let sizedrag=false;
 function hdrag1(event){
     if(!sizedrag){
