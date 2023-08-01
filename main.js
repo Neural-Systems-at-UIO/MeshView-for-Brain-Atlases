@@ -878,7 +878,7 @@ async function collab_open() {
         cloud=json;
         cstyle.display="none";
     }
-    if(cloud.length) {
+    if(cloud && cloud.length) {
         let table=document.getElementById("ptstable").innerHTML;
         table+="<tr><td colspan='2' style='background-color:lightgray'>"+pick+"</td></tr>";
         for(const elem of cloud) {
@@ -891,6 +891,8 @@ async function collab_open() {
         };
         document.getElementById("ptstable").innerHTML=table;
         redraw();
+    } else {
+        alert("No point clouds added.");
     }
 }
 
