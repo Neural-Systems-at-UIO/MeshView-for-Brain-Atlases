@@ -146,6 +146,10 @@ li.mesh > span > input[type=range]{
 li.nomesh > span > input[type=range]{
     top:3px;
 }
+td > input[type=range]{
+    /*position:relative;*/
+    width: 4em;
+}
 #consolediv{
     background:rgba(0,0,0,0.5);
     position:absolute;

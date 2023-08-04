@@ -40,18 +40,14 @@ function startmv(){
         openerThing();
     if(collab){
             document.getElementById("cloud_standalone").style.display="none";
-            var table=//points.length>0?document.getElementById("ptstable").innerHTML:
-                    "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-            table+="<tr><td colspan='2' style='background-color:lightgray'>"+collab.filename+"</td></tr>";
+            addptshead(collab.filename);
             collab.json.forEach(function(elem){
-                var idx=points.length;
-                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+                addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
                 elem.r/=255;elem.g/=255;elem.b/=255;
                 var pts=new Points(elem);
                 pts.createBuffer(gl);
                 points.push(pts);
             });
-            document.getElementById("ptstable").innerHTML=table;
             redraw();
     } else {
             document.getElementById("cloud_collab").style.display="none";
@@ -368,26 +364,37 @@ function solidCloud(flatrf){
         gl.enableVertexAttribArray(coords);
 
         gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
-        gl.uniform1f(gl.getUniformLocation(prg,"pointsize"),parseFloat(document.getElementById("psize").value));
+//        gl.uniform1f(gl.getUniformLocation(prg,"pointsize"),parseFloat(document.getElementById("psize").value));
+        const psize=gl.getUniformLocation(prg,"pointsize");
+        const psizebase=document.getElementById("psize").valueAsNumber;
 
         var color=gl.getUniformLocation(prg,"color");
-        points.forEach(function(elem){
-            if(elem.enabled && elem.a===1 && elem.count>0){
-                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
+        points.forEach(function(elem,idx){
+            const pscale=document.getElementById("siz"+idx).valueAsNumber;
+            if(pscale>0 /*elem.enabled && elem.a===1*/ && elem.count>0){
+//                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
+                const rgb=document
+                        .getElementById("clr"+idx)
+                        .value
+                        .substring(1)
+                        .match(/(.{2})/g)
+                        .map(x=>parseInt(x,16)/255);
+                gl.uniform4f(color,rgb[0],rgb[1],rgb[2],1);
+                gl.uniform1f(psize,psizebase*pscale);
                 elem.drawArray(gl,coords);
             }
         });
-        gl.depthMask(false);
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-        points.forEach(function(elem){
-            if(elem.enabled && elem.a!==1 && elem.count>0){
-                gl.uniform4f(color,elem.r,elem.g,elem.b,elem.a);
-                elem.drawArray(gl,coords);
-            }
-        });
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
+//        gl.depthMask(false);
+//        gl.enable(gl.BLEND);
+//        gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+//        points.forEach(function(elem){
+//            if(elem.enabled && elem.a!==1 && elem.count>0){
+//                gl.uniform4f(color,elem.r,elem.g,elem.b,elem.a);
+//                elem.drawArray(gl,coords);
+//            }
+//        });
+//        gl.depthMask(true);
+//        gl.disable(gl.BLEND);
     }
 }
 
@@ -401,7 +408,9 @@ function cutCloud(flatrf,cx,cy,cz,sx,sy,sz){
         gl.enableVertexAttribArray(coords);
 
         gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
-        gl.uniform1f(gl.getUniformLocation(prg,"pointsize"),parseFloat(document.getElementById("psize").value));
+//        gl.uniform1f(gl.getUniformLocation(prg,"pointsize"),parseFloat(document.getElementById("psize").value));
+        const psize=gl.getUniformLocation(prg,"pointsize");
+        const psizebase=document.getElementById("psize").valueAsNumber;
 
         var cnp=collectCut(sx,sy,sz);
         var cutnormal=cnp.cutnormal;
@@ -411,24 +420,33 @@ function cutCloud(flatrf,cx,cy,cz,sx,sy,sz){
         gl.uniform3fv(gl.getUniformLocation(prg,"cutnormal"),cutnormal.slice(0,3));
 
         var color=gl.getUniformLocation(prg,"color");
-        points.forEach(function(elem){
-            if(elem.enabled && elem.a===1 && elem.count>0){
-                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
+        points.forEach(function(elem,idx){
+            const pscale=document.getElementById("siz"+idx).valueAsNumber;
+            if(pscale>0 /*elem.enabled && elem.a===1*/ && elem.count>0){
+//                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
+                const rgb=document
+                        .getElementById("clr"+idx)
+                        .value
+                        .substring(1)
+                        .match(/(.{2})/g)
+                        .map(x=>parseInt(x,16)/255);
+                gl.uniform4f(color,rgb[0],rgb[1],rgb[2],1);
+                gl.uniform1f(psize,psizebase*document.getElementById("siz"+idx).valueAsNumber);
                 elem.drawArray(gl,coords);
             }
         });
 
-        gl.depthMask(false);
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-        points.forEach(function(elem){
-            if(elem.enabled && elem.a!==1 && elem.count>0){
-                gl.uniform4f(color,elem.r,elem.g,elem.b,elem.a);
-                elem.drawArray(gl,coords);
-            }
-        });
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
+//        gl.depthMask(false);
+//        gl.enable(gl.BLEND);
+//        gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+//        points.forEach(function(elem){
+//            if(elem.enabled && elem.a!==1 && elem.count>0){
+//                gl.uniform4f(color,elem.r,elem.g,elem.b,elem.a);
+//                elem.drawArray(gl,coords);
+//            }
+//        });
+//        gl.depthMask(true);
+//        gl.disable(gl.BLEND);
     }
 }
 
@@ -593,21 +611,17 @@ function autoload(url){
                 alert("Loading of point cloud "+url+" has failed.");
             return;
         }
-        var table=points.length>0?document.getElementById("ptstable").innerHTML:
-                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
         var m=url.match(/.*\/(.*\/.*$)/);
         if(m && m[1])
             url=m[1].replace("/"," ");
-        table+="<tr><td colspan='2' style='background-color:lightgray'>"+url+"</td></tr>";
+        addptshead(url);
         data.forEach(function(elem){
-            var idx=points.length;
-            table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+            addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
             elem.r/=255;elem.g/=255;elem.b/=255;
             var pts=new Points(elem);
             pts.createBuffer(gl);
             points.push(pts);
         });
-        document.getElementById("ptstable").innerHTML=table;
         redraw();
     };
     xhr.send();
@@ -618,18 +632,14 @@ function loadfiles(event)
         let fr=new FileReader();
         fr.onload=function(){
             var data=JSON.parse(fr.result);
-            var table=points.length>0?document.getElementById("ptstable").innerHTML:
-                    "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-            table+="<tr><td colspan='2' style='background-color:lightgray'>"+file.name+"</td></tr>";
+            addptshead(file.name);
             data.forEach(function(elem){
-                var idx=points.length;
-                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+                addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
                 elem.r/=255;elem.g/=255;elem.b/=255;
                 var pts=new Points(elem);
                 pts.createBuffer(gl);
                 points.push(pts);
             });
-            document.getElementById("ptstable").innerHTML=table;
             redraw();
         };
         fr.readAsText(file);
@@ -639,39 +649,37 @@ function openerThing(){
     opener.postMessage("ready.","*");
     onmessage=function(event){
             var data=event.data;
-            var table=points.length>0?document.getElementById("ptstable").innerHTML:
-                    "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-            table+="<tr><td colspan='2' style='background-color:lightgray'>Preview</td></tr>";
+            addptshead("Preview");
             data.forEach(function(elem){
-                var idx=points.length;
-                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+                addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
                 elem.r/=255;elem.g/=255;elem.b/=255;
                 var pts=new Points(elem);
                 pts.createBuffer(gl);
                 points.push(pts);
             });
-            document.getElementById("ptstable").innerHTML=table;
             redraw();
     };
 }
 function showall(){
     for(var i=0;i<points.length;i++){
-        points[i].enabled=true;
-        document.getElementById("c"+i).checked=true;
+//        points[i].enabled=true;
+//        document.getElementById("c"+i).checked=true;
+        document.getElementById("siz"+i).value=1;
     }
     redraw();
 }
 function hideall(){
     for(var i=0;i<points.length;i++){
-        points[i].enabled=false;
-        document.getElementById("c"+i).checked=false;
+//        points[i].enabled=false;
+//        document.getElementById("c"+i).checked=false;
+        document.getElementById("siz"+i).value=0;
     }
     redraw();
 }
-function toggle(idx){
-    points[idx].enabled=document.getElementById("c"+idx).checked;
-    redraw();
-}
+//function toggle(idx){
+//    points[idx].enabled=document.getElementById("c"+idx).checked;
+//    redraw();
+//}
 
 function cchange(idx){
     var c=document.getElementById("c"+idx).value.substring(1);
@@ -806,20 +814,22 @@ function simple_close(){
 
 function simple_add(){
     try{
-        var table=points.length>0?document.getElementById("ptstable").innerHTML:
-                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-        table+="<tr><td colspan='2' style='background-color:lightgray'>"+cloud_head.value+"</td></tr>";
+//        var table=points.length>0?document.getElementById("ptstable").innerHTML:
+//                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
+        addptshead(cloud_head.value);
+//        table+="<tr><td colspan='2' style='background-color:lightgray'>"+cloud_head.value+"</td></tr>";
         var lines=document.getElementById("cloud_text").value.split(/\r?\n/);
         var name,r=0,g=0,b=0;
         var batch=[];
         function add(){
             if(batch.length){
-                var idx=points.length;
+//                var idx=points.length;
                 if(!name)name="Cloud #"+(idx+1);
+                addptscloud(name,[Math.floor(r*255),Math.floor(g*255),Math.floor(b*255)],1);
                 var pts=new Points({idx:idx,r:r,g:g,b:b,name:name,count:batch.length/3,triplets:batch});
                 pts.createBuffer(gl);
                 points.push(pts);
-                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+name+"</td></tr>";
+//                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+name+"</td></tr>";
                 name=undefined;
                 batch=[];
             }
@@ -848,7 +858,7 @@ function simple_add(){
         });
         add();
 
-        document.getElementById("ptstable").innerHTML=table;
+//        document.getElementById("ptstable").innerHTML=table;
         redraw();
         simple_close();
     }catch(e){
@@ -879,17 +889,14 @@ async function collab_open() {
         cstyle.display="none";
     }
     if(cloud && cloud.length) {
-        let table=document.getElementById("ptstable").innerHTML;
-        table+="<tr><td colspan='2' style='background-color:lightgray'>"+pick+"</td></tr>";
+        addptshead(pick);
         for(const elem of cloud) {
-            const idx=points.length;
-            table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+elem.name+"</td></tr>";
+            addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
             elem.r/=255;elem.g/=255;elem.b/=255;
             const pts=new Points(elem);
             pts.createBuffer(gl);
             points.push(pts);
         };
-        document.getElementById("ptstable").innerHTML=table;
         redraw();
     } else {
         alert("No point clouds added.");
@@ -934,4 +941,22 @@ function screenshot(){
         a.click();
         URL.revokeObjectURL(url);
     });
+}
+
+function getptstable(){
+    const table=document.getElementById("ptstable");
+    if(table.innerHTML==="")
+        table.innerHTML="<tr><th colspan='4'><button onclick='showall()'>Show all</button><button onclick='hideall()'>Hide all</button></th></tr>";
+    return table;
+}
+function addptshead(name){
+    getptstable().innerHTML+="<tr><td colspan='4' style='background-color:lightgray'>"+name+"</td></tr>";
+}
+function addptscloud(name,color,size){
+    const idx=points.length;
+    getptstable().innerHTML+="<tr>"+
+//            "<td><input type='checkbox' id='c"+idx+"' checked='true' onchange='toggle("+idx+")'></td>"+
+            "<td><input type='color' id='clr"+idx+"' value='#"+color.map(x=>x.toString(16).padStart(2,0)).join("")+"' oninput='redraw()'></td>"+
+            "<td><input type='range' id='siz"+idx+"' min='0' max='1' step='0.1' value='"+size+"' oninput='redraw()'></td>"+
+            "<td>"+name+"</td></tr>";
 }
