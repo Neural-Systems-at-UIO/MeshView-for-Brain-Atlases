@@ -27,14 +27,12 @@ body{
 }
 #meshpanel{
     margin-left: 5px;
-    /*                padding: 5px;
-                    padding-right: 0;*/
     background: #F0F0FF;
     width: 200px;
     flex: none;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    /*overflow: hidden;*/
     /*resize: horizontal;*/
 }
 #global{
@@ -42,9 +40,8 @@ body{
 }
 #tree{
     flex: auto;
-    /*padding-right: 0.5em;*/
-    overflow-x: hidden;
-    overflow-y: scroll;
+    margin-bottom: 0;
+    overflow: auto;
     user-select: none;
 }
 .hsiz{
@@ -56,14 +53,21 @@ body{
     flex: auto;
 }
 #ptspanel{
-    /*padding: 5px;*/
     flex: none;
     width: 150px;
     background: #F0F0FF;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
 }
 #ptsbuttons{
     display: none;
+    flex: none;
+}
+#ptscontainer{
+    overflow: auto;
+    flex: auto;
 }
 
 #cut_box{
