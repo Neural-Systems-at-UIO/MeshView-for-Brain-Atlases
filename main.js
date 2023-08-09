@@ -921,7 +921,7 @@ function gmmove(event){
         if(sizedrag.hasOwnProperty("x1"))
             console.log(document.getElementById("meshpanel").style.width=(event.clientX-sizedrag.x1-5)+"px");
         if(sizedrag.hasOwnProperty("x2"))
-            console.log(document.getElementById("ptslist").style.width=(window.innerWidth-event.clientX-sizedrag.x2)+"px");
+            console.log(document.getElementById("ptspanel").style.width=(window.innerWidth-event.clientX-sizedrag.x2)+"px");
     }
 }
 function gmup(event){
@@ -944,19 +944,42 @@ function screenshot(){
 }
 
 function getptstable(){
-    const table=document.getElementById("ptstable");
-    if(table.innerHTML==="")
-        table.innerHTML="<tr><th colspan='4'><button onclick='showall()'>Show all</button><button onclick='hideall()'>Hide all</button></th></tr>";
-    return table;
+    document.getElementById("ptsbuttons").style.display="inline";
+    return document.getElementById("ptstable");
 }
 function addptshead(name){
-    getptstable().innerHTML+="<tr><td colspan='4' style='background-color:lightgray'>"+name+"</td></tr>";
+    const tr=document.createElement("tr");
+    const td=document.createElement("td");
+    td.setAttribute("colspan","3");
+    td.style="background-color:lightgray";
+    td.innerText=name;
+    tr.appendChild(td);
+    getptstable().appendChild(tr);
 }
 function addptscloud(name,color,size){
     const idx=points.length;
-    getptstable().innerHTML+="<tr>"+
-//            "<td><input type='checkbox' id='c"+idx+"' checked='true' onchange='toggle("+idx+")'></td>"+
-            "<td><input type='color' id='clr"+idx+"' value='#"+color.map(x=>x.toString(16).padStart(2,0)).join("")+"' oninput='redraw()'></td>"+
-            "<td><input type='range' id='siz"+idx+"' min='0' max='1' step='0.1' value='"+size+"' oninput='redraw()'></td>"+
-            "<td>"+name+"</td></tr>";
+    const tr=document.createElement("tr");
+    const ctd=document.createElement("td");
+    const col=document.createElement("input");
+    col.type="color";
+    col.id="clr"+idx;
+    col.value="#"+color.map(x=>x.toString(16).padStart(2,0)).join("");
+    col.oninput=redraw;
+    const rtd=document.createElement("td");
+    const ran=document.createElement("input");
+    ran.type="range";
+    ran.id="siz"+idx;
+    ran.min=0;
+    ran.max=1;
+    ran.step=0.1;
+    ran.value=size;
+    ran.oninput=redraw;
+    const ntd=document.createElement("td");
+    ntd.innerText=name;
+    ctd.appendChild(col);
+    tr.appendChild(ctd);
+    rtd.appendChild(ran);
+    tr.appendChild(rtd);
+    tr.appendChild(ntd);
+    getptstable().appendChild(tr);
 }
