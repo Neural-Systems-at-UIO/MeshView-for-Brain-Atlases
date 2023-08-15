@@ -824,9 +824,9 @@ function simple_add(){
         function add(){
             if(batch.length){
 //                var idx=points.length;
-                if(!name)name="Cloud #"+(idx+1);
+                if(!name)name="Cloud #"+(/*idx*/points.length+1);
                 addptscloud(name,[Math.floor(r*255),Math.floor(g*255),Math.floor(b*255)],1);
-                var pts=new Points({idx:idx,r:r,g:g,b:b,name:name,count:batch.length/3,triplets:batch});
+                var pts=new Points({/*idx:idx,*/r:r,g:g,b:b,name:name,/*count:batch.length/3,*/triplets:batch});
                 pts.createBuffer(gl);
                 points.push(pts);
 //                table+="<tr><td><input type='checkbox' checked='true' id='c"+idx+"' onchange='toggle("+idx+")'></td><td>"+name+"</td></tr>";
