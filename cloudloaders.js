@@ -3,7 +3,7 @@ async function loadlz(filename) {
             `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${filename}?redirect=false`,
             {headers: {Authorization: `Bearer ${state.token}`}})
             .then(response => response.json())
-            .then(json => fetch(json.url))
+            .then(json => fetch(json.url.includes("?")?json.url:json.url+"?"+Date.now()))
             .then(response => response.json());
     const cloud = [];
     //debugger;
@@ -32,7 +32,7 @@ async function loadzip(filename, pre) {
         clearInterval(spinner);
         pre.innerText = msg;
     };
-    const zipdir = await netunzip(
+    const zipdir = await netunzip( // TODO? Date.now()
             async() => fetch(
                 `https://data-proxy.ebrains.eu/api/v1/buckets/${state["clb-collab-id"]}/${filename}?redirect=false`,
                 {headers: {Authorization: `Bearer ${state.token}`}})
