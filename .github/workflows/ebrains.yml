@@ -13,5 +13,5 @@ jobs:
         with:
           source_repo: "Neural-Systems-at-UIO/MeshView-for-Brain-Atlases"
           source_branch: "master"
-          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/csucs/meshview.git"
+          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/ri/tech-hub/apps/nesys/meshview.git"
           destination_branch: "master"
