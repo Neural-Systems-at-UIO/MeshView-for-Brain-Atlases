@@ -9,7 +9,7 @@ Any web browser can be used.
 
 WebAlign can be used directly (see links further down) but is also available as a web-service through EBRAINS. Please consult these page if you want to analyse your our data and generate point clouds representing your data: 
 
-* `Annotate an image and export coordinates <https://www.ebrains.eu/brain-atlases/analysis/image-annotation-and-export-of-coordinate-points>`_
+* `Image annotation and coordinate extraction <https://www.ebrains.eu/brain-atlases/analysis/image-annotation-and-export-of-coordinate-points>`_
 * `Coordinate extraction from histological image series <https://www.ebrains.eu/brain-atlases/analysis/labelled-features-analysis>`_
 
 **Conditions of use**
