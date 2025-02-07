@@ -2,6 +2,7 @@ var collab;
 var moz=navigator.userAgent.toLowerCase().indexOf('firefox')>-1;
 var atlasroot="WHS_SD_rat_atlas_v2";
 var atlasorg="WHS_SD_Rat_v2_39um";
+var atlas_config;
 function startmv(){
     document.body.onmouseup=gmup;
     document.body.onmousemove=gmmove;
@@ -11,9 +12,18 @@ function startmv(){
     location.search.slice(1).split("&").forEach(function(pair){
         if(pair.length===0)return;
         var parts=pair.split("=");
-        if(parts[0]==="atlas")atlasroot=atlasorg=parts[1];
-        else if(parts[0]==="cloud"){
-            autoload(parts[1]);
+        switch(parts[0]){
+            case "atlas":
+                atlasroot=atlasorg=parts[1];
+                break;
+            case "cloud":
+                autoload(parts[1]);
+                break;
+            case "atlas_config":
+                atlas_config=parts[1];
+                break;
+            default:
+                console.log("?",pair);
         }
     });
     init();
@@ -57,6 +67,7 @@ function startmv(){
 var atlas=new Map();
 var total=0;
 var loaded=0;
+var treestring;
 function jsonready(event){
     function walk(json,list,path){
         for(let id of path){
@@ -86,7 +97,7 @@ function jsonready(event){
         let range=document.createElement("input");
         range.type="range";
         range.max=20;
-        range.value=json.hasOwnProperty("alpha")?json.alpha:20;
+        range.value=atlas_config?0:json.hasOwnProperty("alpha")?json.alpha:20;
         range.step=1;
         range.oninput=slide;
         li.appendChild(range);
@@ -121,8 +132,40 @@ function jsonready(event){
             total++;
         }
     });
+    
+    if(atlas_config){
+        function setTree(node,level){
+            node.c_visibility.value=level;
+            if(node.children)
+                for(const child of node.children)
+                    setTree(atlas.get(child),level);
+        }
+        const items=atlas_config.split(",");
+        for(const item of items){
+            const level=item.charCodeAt()-'A'.charCodeAt();
+            const mode=item[1];
+            const node=atlas.get(parseInt(item.substring(2)));
+            if(mode==="-")
+                node.c_visibility.value=level;
+            if(mode==="+")
+                setTree(node,level);
+        }
+    }
 
     progress();
+    
+    const copy=JSON.parse(JSON.stringify(event.target.response));
+    function clear(node){
+        for(const prop in node)
+            if(prop!=="id" && prop!=="children")
+                delete node[prop];
+        if(node.children)
+            for(const child of node.children)
+                clear(child);
+    }
+    for(const node of copy)
+        clear(node);
+    treestring=JSON.stringify({code:0,children:copy});
 }
 function progress(){
     document.getElementById("counter").innerHTML=loaded!==total?loaded+"/"+total:"";
@@ -982,4 +1025,51 @@ function addptscloud(name,color,size){
     tr.appendChild(rtd);
     tr.appendChild(ntd);
     getptstable().appendChild(tr);
+}
+function configString(){
+    const tree=JSON.parse(treestring);
+    const set=new Set;
+    function fill(node){
+        if(node.id){
+            node.code=String.fromCharCode(atlas.get(node.id).c_visibility.valueAsNumber+'A'.charCodeAt());
+            if(node.code)
+                set.add(node);
+            node.subcodes=new Map([[
+                    node.code,
+                    [node]
+            ]]);
+        }
+        if(node.children)
+            for(const child of node.children){
+                fill(child);
+                if(node.id){
+                    for(const [k,v] of child.subcodes){
+                        if(node.subcodes.has(k))
+                            node.subcodes.set(k,[...node.subcodes.get(k),...v]);
+                        else
+                            node.subcodes.set(k,[...v]);
+                    }
+                }
+            }
+    }
+    fill(tree);
+    
+    function checkTree(node){
+        if(!node.children)
+            return true;
+    }
+
+//    function count
+    let result="";
+    for(const node of set){
+        const subcodes=node.subcodes;
+        if(subcodes.size===1){
+            result+=","+node.code+"+"+node.id;
+            for(const sub of node.subcodes.values().next().value)
+                set.delete(sub);
+        } else {
+            result+=","+node.code+"-"+node.id;
+        }
+    }
+    prompt("Configuration string","&atlas_config="+result.substring(1));
 }
