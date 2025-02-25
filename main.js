@@ -23,7 +23,15 @@ function startmv(){
                 atlas_config=parts[1];
                 break;
             default:
-                console.log("?",pair);
+                const ctrl=document.getElementById(parts[0]);
+                if(ctrl) {
+                    if(ctrl.type==="color")
+                        ctrl.value="#"+parts[1];
+                    else
+                        ctrl.value=parts[1];
+                }
+                else
+                    console.log("?",pair);
         }
     });
     init();
