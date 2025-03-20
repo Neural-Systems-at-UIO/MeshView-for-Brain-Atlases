@@ -1,0 +1,35 @@
+{
+    "@context": "https://w3id.org/codemeta/3.0",
+    "type": "SoftwareSourceCode",
+    "author": [
+        {
+            "id": "https://orcid.org/0000-0002-2093-6274",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "NeSys, University of Oslo"
+            },
+            "familyName": "Csucs",
+            "givenName": "Gergely"
+        }
+    ],
+    "codeRepository": "https://github.com/Neural-Systems-at-UIO/MeshView-for-Brain-Atlases.git",
+    "dateCreated": "2018-04-23",
+    "dateModified": "2023-05-09",
+    "datePublished": "2018-04-23",
+    "description": "MeshView is a web application for real-time 3D display of surface mesh data representing structural parcellations from volumetric atlases, such as the Waxholm Space Atlas of the Sprague Dawley Rat Brain.",
+    "identifier": "RRID:SCR_017222",
+    "isPartOf": "https://quint-workflow.readthedocs.io/en/latest/",
+    "license": "https://spdx.org/licenses/MIT",
+    "name": "MeshView",
+    "programmingLanguage": [
+        "JavaScript",
+        "GLSL"
+    ],
+    "relatedLink": "https://www.nitrc.org/projects/meshview/",
+    "runtimePlatform": "Web",
+    "version": "0.8h",
+    "developmentStatus": "active",
+    "funding": "H2020-EU.1.2 SGA 720270, H2020-EU.2.3 SGA 785907",
+    "issueTracker": "https://github.com/Neural-Systems-at-UIO/MeshView-for-Brain-Atlases/issues"
+}
