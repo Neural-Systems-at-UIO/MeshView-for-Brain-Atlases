@@ -40,11 +40,25 @@ $json["token"]=$token;
         <script>
             const state=<?php echo json_encode($json);?>;
             async function startup(){
+                const {token,cloud}=state;
+                if(cloud){
+                    atlasroot=atlasorg=state.atlas;
+                    const json = await fetch(
+                            `${cloud}?redirect=false`,
+                            {headers: {Authorization: `Bearer ${token}`}})
+                            .then(response => response.json())
+                            .then(json => fetch(json.url.includes("?")?json.url:json.url+"?"+Date.now()))
+                            .then(response => response.json());
+                    collab={filename:cloud.substring(cloud.lastIndexOf("/")+1),json};
+                    document.body.innerHTML=await fetch("body.html").then(response=>response.text());
+                    startmv();
+                    return;
+                }
                 const pre=document.getElementsByTagName("pre")[0];
                 pre.innerText="";
                 const choice=await dppick({
                     bucket:state["clb-collab-id"],
-                    token:state.token,
+                    token:token,
                     title:"Select Nutil result pack or LocaliZoom file",
                     extensions:[".zip",".lz"],
                     nocancel:true
