@@ -27,7 +27,7 @@ Gergely Csucs
 - MIT licence
 
 # Current version
-0.9
+v0.9
 
 # Contact us
 Report issues here on github or email: support@ebrains.eu
