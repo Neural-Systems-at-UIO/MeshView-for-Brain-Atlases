@@ -28,8 +28,8 @@
     ],
     "relatedLink": "https://www.nitrc.org/projects/meshview/",
     "runtimePlatform": "Web",
-    "version": "0.8h",
+    "version": "0.9",
     "developmentStatus": "active",
-    "funding": "H2020-EU.1.2 SGA 720270, H2020-EU.2.3 SGA 785907",
+    "funding": "H2020-EU.1.2 SGA 720270, H2020-EU.2.3 SGA 785907, HORIZON-INFRA (EBRAINS 2.0) 101147319",
     "issueTracker": "https://github.com/Neural-Systems-at-UIO/MeshView-for-Brain-Atlases/issues"
 }
