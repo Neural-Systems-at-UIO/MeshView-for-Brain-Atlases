@@ -4,6 +4,7 @@ var atlasroot="WHS_SD_rat_atlas_v2";
 var atlasorg="WHS_SD_Rat_v2_39um";
 var atlas_config;
 function startmv(){
+    document.body.onpaste=pastecloud;
     document.body.onmouseup=gmup;
     document.body.onmousemove=gmmove;
     drag(cut_box,cut_handle);
@@ -863,13 +864,13 @@ function simple_close(){
     document.getElementById("simple_cloud").style.display="none";
 }
 
-function simple_add(){
+function simple_add(text){
     try{
 //        var table=points.length>0?document.getElementById("ptstable").innerHTML:
 //                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-        addptshead(cloud_head.value);
+        if(!text)addptshead(cloud_head.value);
 //        table+="<tr><td colspan='2' style='background-color:lightgray'>"+cloud_head.value+"</td></tr>";
-        var lines=document.getElementById("cloud_text").value.split(/\r?\n/);
+        var lines=(text||document.getElementById("cloud_text").value).split(/\r?\n/);
         var name,r=0,g=0,b=0;
         var batch=[];
         function add(){
@@ -1033,6 +1034,11 @@ function addptscloud(name,color,size){
     tr.appendChild(rtd);
     tr.appendChild(ntd);
     getptstable().appendChild(tr);
+}
+function pastecloud(event) {
+    if(document.getElementById("simple_cloud").style.display==="block")
+        return;
+    simple_add(event.clipboardData.getData("text"));
 }
 function configString(){
     const tree=JSON.parse(treestring);
