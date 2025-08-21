@@ -3,6 +3,7 @@ var moz=navigator.userAgent.toLowerCase().indexOf('firefox')>-1;
 var atlasroot="WHS_SD_rat_atlas_v2";
 var atlasorg="WHS_SD_Rat_v2_39um";
 var atlas_config;
+let cut_hack=false;
 function startmv(){
     document.body.onpaste=pastecloud;
     document.body.onmouseup=gmup;
@@ -22,6 +23,16 @@ function startmv(){
                 break;
             case "atlas_config":
                 atlas_config=parts[1];
+                break;
+            case "rots":
+                [orb,bob,scale.value]=parts[1].split(";").map(x=>parseFloat(x));
+                break;
+            case "cut":
+                [cut_hrot.value,cut_vrot.value,cut_level.value]=
+                        parts[1].split(";").map(x=>parseFloat(x));
+                cut_range.value=cut_level.value;
+                drawCut();
+                cut_hack=true;
                 break;
             default:
                 const ctrl=document.getElementById(parts[0]);
@@ -178,6 +189,10 @@ function jsonready(event){
 }
 function progress(){
     document.getElementById("counter").innerHTML=loaded!==total?loaded+"/"+total:"";
+    if(loaded===total && cut_hack){
+        cut.checked=true;
+        toggleCut({target:cut});
+    }
 }
 function doColor(event){
     event.target.style="background-color:"+event.target.value;
@@ -1085,5 +1100,26 @@ function configString(){
             result+=","+node.code+"-"+node.id;
         }
     }
-    prompt("Configuration string","&atlas_config="+result.substring(1));
+    //prompt("Configuration string","&atlas_config="+result.substring(1));
+    
+    let link=location.origin+location.pathname+"?";
+    for(const pair of location.search.slice(1).split("&")){
+        const parts=pair.split("=");
+        if(!["rots","cut","atlas_config"].includes(parts[0]))
+            link+=link.endsWith("?")?pair:"&"+pair;
+    }
+    link+=`&rots=${orb};${bob};${scale.value}`
+        +`&atlas_config=${result.substring(1)}`;
+    if(cut.checked)
+        link+=`&cut=${cut_hrot.value};${cut_vrot.value};${cut_level.value}`;
+
+    navigator.clipboard.writeText(link)
+            .then(()=>popover("Link copied to clipboard."))
+            .catch(ex=>alert(ex));
+}
+function popover(html){
+    const p=document.getElementById("popover");
+    p.innerHTML=html;
+    p.showPopover();
+    setTimeout(()=>p.hidePopover(),2000);
 }
