@@ -42,16 +42,21 @@ $json["token"]=$token;
             async function startup(){
                 const {token,cloud}=state;
                 if(cloud){
-                    atlasroot=atlasorg=state.atlas;
-                    const json = await fetch(
-                            `${cloud}?redirect=false`,
-                            {headers: {Authorization: `Bearer ${token}`}})
-                            .then(response => response.json())
-                            .then(json => fetch(json.url.includes("?")?json.url:json.url+"?"+Date.now()))
-                            .then(response => response.json());
-                    collab={filename:cloud.substring(cloud.lastIndexOf("/")+1),json};
-                    document.body.innerHTML=await fetch("body.html").then(response=>response.text());
-                    startmv();
+                    if(cloud.endsWith(".lz")){
+                        const data=await loadlz(cloud);
+                        atlasroot=atlasorg=data.lz.atlas;
+                        collab={filename:data.filename,json:data.cloud};
+                    }else{
+                        atlasroot=atlasorg=state.atlas;
+                        const json = await fetch(
+                                `${cloud}?redirect=false`,
+                                {headers: {Authorization: `Bearer ${token}`}})
+                                .then(response => response.json())
+                                .then(json => fetch(json.url.includes("?")?json.url:json.url+"?"+Date.now()))
+                                .then(response => response.json());
+                        collab={filename:cloud.substring(cloud.lastIndexOf("/")+1),json};
+                    }
+                    launch();
                     return;
                 }
                 const pre=document.getElementsByTagName("pre")[0];
@@ -66,9 +71,8 @@ $json["token"]=$token;
                 if(choice.pick.endsWith(".lz")){
                     const data=await loadlz(choice.pick);
                     atlasroot=atlasorg=data.lz.atlas;
-                    document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                     collab={filename:data.filename,json:data.cloud};
-                    startmv();
+                    launch();
                     return;
                 }
                 let {label,json,update,stop}=await loadzip(choice.pick,pre);
@@ -82,10 +86,10 @@ $json["token"]=$token;
                 if(label && json){
                     update("Starting MeshView ");
                     atlasroot=atlasorg=label;
-                    document.body.innerHTML=await fetch("body.html").then(response=>response.text());
                     collab={filename:choice.pick,json};
                     stop();
-                    startmv();
+                    launch();
+                    return;
                 }else{
                     stop();
                     requestAnimationFrame(()=>{
@@ -95,6 +99,11 @@ $json["token"]=$token;
                         });
                     });
                 }
+            }
+            async function launch(){
+                document.body.innerHTML=await fetch("body.html").then(response=>response.text());
+                document.getElementById("btn_cfg").hidden=true;
+                startmv();
             }
         </script>
     </head>

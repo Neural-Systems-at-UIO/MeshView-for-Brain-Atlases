@@ -19,7 +19,7 @@
         <div id="meshpanel">
             <div id="global" style="display: flex">All:<input type="range" min="0" max="20" value="20" step="1" oninput="setGlobal(event)" style="width:100%"></div>
             <ul id="tree"></ul>
-            <button onclick="configString()">Get configuration</button>
+            <button id="btn_cfg" onclick="configString()">Get configuration</button>
         </div>
         <div id="hsiz1" class="hsiz" onmousedown="hdrag1(event)"></div>
         <div id="spacer" onmousedown="mdown(event)" onmousemove="mmove(event)" onmouseup="mup(event)" onmouseout="mout(event)"></div>
