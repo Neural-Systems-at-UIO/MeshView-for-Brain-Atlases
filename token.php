@@ -42,7 +42,7 @@ $json["token"]=$token;
             async function startup(){
                 const {token,cloud}=state;
                 if(cloud){
-                    if(cloud.endsWith(".lz")){
+                    if(cloud.endsWith(".lz")||cloud.endsWith(".wwrp")||cloud.endsWith(".waln")){
                         const data=await loadlz(cloud);
                         atlasroot=atlasorg=data.lz.atlas;
                         collab={filename:data.filename,json:data.cloud};
