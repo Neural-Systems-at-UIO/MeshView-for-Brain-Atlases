@@ -4,7 +4,7 @@ MeshView is one of several tools developed by the Human Brain Project (HBP) with
 
 Forked from https://github.com/Tevemadar/meshview-demo for bundling additional atlases and releasing on OKD.
 
-Atlas links (see https://meshview-for-brain-atlases.readthedocs.io/en/latest/) for complete list:
+# Access: Atlas links (see https://meshview-for-brain-atlases.readthedocs.io/en/latest/) for complete list:
 
 [Waxholm Space Atlas of the Sprague Dawley Rat Brain v2](https://meshview.apps.hbp.eu/?atlas=WHS_SD_Rat_v2_39um) - hierarchical, 80 visible structures, with "inner ear"  
 [Waxholm Space Atlas of the Sprague Dawley Rat Brain v3](https://meshview.apps.hbp.eu/?atlas=WHS_SD_Rat_v3_39um) - hierarchical, 118 visible structures  
@@ -13,12 +13,11 @@ Atlas links (see https://meshview-for-brain-atlases.readthedocs.io/en/latest/) f
 [Allen Mouse Brain Atlas CCFv3 2017](https://meshview.apps.hbp.eu/?atlas=ABA_Mouse_CCFv3_2017_25um) - hierarchical, 670 visible structures, with "root" (transparent at start)  
 [Allen Mouse Brain Atlas CCFv3 root](https://meshview.apps.hbp.eu/?atlas=AMBA_CCFv3_root) - root structure only (brain outline)
 
-
-# Acknowledgements
-MeshView is developed by the Neural Systems Laboratory at the Institute of Basic Medical Sciences, University of Oslo, Norway. MeshView was developed with support from the EBRAINS infrastructure, and funding from the European Union’s Horizon 2020 Framework Programme for Research and Innovation under the Framework Partnership Agreement No. 650003 (HBP FPA) and the European Union’s Horizon Europe Programme for Research Infrastructures Grant Agreement No. 101147319 (EBRAINS 2.0).
-
 # Developer
 Gergely Csucs
+
+# Documentation
+https://meshview-for-brain-atlases.readthedocs.io/en/latest/
 
 # Authors
  Maja A Puchades, Jan G Bjaalie. 
@@ -27,7 +26,15 @@ Gergely Csucs
 - MIT licence
 
 # Current version
-v0.9
+- v0.9
+
+# Citation
+**Meshview (RRID:SCR_017222)**
+
+- Puchades MA, Yates SC, Csucs G, Carey H, Balkir A, Leergaard TB, Bjaalie JG. Software and pipelines for registration and analyses of rodent brain image data in reference atlas space. Front Neuroinform. 2025 Sep 24;19:1629388. https://doi.org/10.3389/fninf.2025.1629388
+
+# Acknowledgements
+MeshView is developed by the Neural Systems Laboratory at the Institute of Basic Medical Sciences, University of Oslo, Norway. MeshView was developed with support from the EBRAINS infrastructure, and funding from the European Union’s Horizon 2020 Framework Programme for Research and Innovation under the Framework Partnership Agreement No. 650003 (HBP FPA) and the European Union’s Horizon Europe Programme for Research Infrastructures Grant Agreement No. 101147319 (EBRAINS 2.0).
 
 # Contact us
 Report issues here on github or email: support@ebrains.eu
