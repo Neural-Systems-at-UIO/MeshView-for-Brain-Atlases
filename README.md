@@ -4,7 +4,7 @@ MeshView is one of several tools developed by the Human Brain Project (HBP) with
 
 Forked from https://github.com/Tevemadar/meshview-demo for bundling additional atlases and releasing on OKD.
 
-# Access: Atlas links (see https://meshview-for-brain-atlases.readthedocs.io/en/latest/) for complete list:
+## Access: Atlas links (see https://meshview-for-brain-atlases.readthedocs.io/en/latest/) for complete list:
 
 [Waxholm Space Atlas of the Sprague Dawley Rat Brain v2](https://meshview.apps.hbp.eu/?atlas=WHS_SD_Rat_v2_39um) - hierarchical, 80 visible structures, with "inner ear"  
 [Waxholm Space Atlas of the Sprague Dawley Rat Brain v3](https://meshview.apps.hbp.eu/?atlas=WHS_SD_Rat_v3_39um) - hierarchical, 118 visible structures  
