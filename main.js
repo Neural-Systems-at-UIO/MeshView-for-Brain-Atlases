@@ -1018,8 +1018,29 @@ function addptshead(name){
     const tr=document.createElement("tr");
     const td=document.createElement("td");
     td.setAttribute("colspan","3");
-    td.style="background-color:lightgray";
-    td.innerText=name;
+    td.style="background-color:lightgray;";//align-content:center;height:30px;";
+    const ran=document.createElement("input");
+    ran.type="range";
+    //ran.id="siz"+idx;
+    ran.min=0;
+    ran.max=1;
+    ran.step=0.1;
+    ran.value=1;
+    ran.oninput=event=>{
+        const value=event.target.value;
+        let row=tr.nextSibling;
+        while(row && row.childNodes.length===3){
+            row.firstChild.nextSibling.firstChild.value=value;
+            row=row.nextSibling;
+        }
+        redraw();
+    };
+    td.appendChild(ran);
+    const span=document.createElement("span");
+    span.innerText=name;
+    span.style="vertical-align:top;";
+    td.appendChild(span);
+//    td.innerText=name;
     tr.appendChild(td);
     getptstable().appendChild(tr);
 }
