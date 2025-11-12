@@ -1,4 +1,4 @@
-**Frequently asked questions**
+**FAQ**
 --------------------------------
 
 (1) Can I export the main window view as a file?
