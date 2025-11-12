@@ -28,7 +28,7 @@ Source code: MIT License.
 ~~~~~~~~~~~~
 
 .. tip:: 
-      WebAlign can be used directly (see links further down) but is also available in the QUINT online workflow https:// quint-online.apps.ebrains.eu/ and the LocaliView workflow https://localiview.apps.ebrains.eu/ through EBRAINS.
+      WebAlign can be used directly (see links further down) but is also available in the QUINT online workflow https://quint-online.apps.ebrains.eu/ and the LocaliView workflow https://localiview.apps.ebrains.eu/ through EBRAINS.
 
 **Individual links can be found here:**
 
