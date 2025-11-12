@@ -7,8 +7,9 @@ MeshView:
 
    Introduction
    Installation
+   Acknowledgements
    support
-   publications
+   FAQ
  
   
    
@@ -20,7 +21,7 @@ MeshView:
    basic 
    cut
    displaying
-   FAQ
+   publications
    
    
    
