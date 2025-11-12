@@ -31,7 +31,7 @@ Source code: MIT License.
 **Access**
 ~~~~~~~~~~~~
 
-* Individual links can be found here:
+**Individual links can be found here:**
 
 `Waxholm Space Atlas of the Sprague Dawley Rat Brain v2 <https://meshview.apps.ebrains.eu/?atlas=WHS_SD_Rat_v2_39um>`_ - hierarchical, 80 visible structures, with "inner ear". 
 
@@ -45,7 +45,8 @@ Source code: MIT License.
 
 `Allen Mouse Brain Atlas CCFv3 root <https://meshview.apps.ebrains.eu/?atlas=AMBA_CCFv3_root>`_ - root structure only (brain outline).
 
-* For versions with double cut of the point clouds se here:
+**For versions with double cut of the point clouds se here:**
+
 https://meshview-for-brain-atlases.readthedocs.io/en/latest/displaying.html#meshview-with-double-cut-feature
 
 **Versions and release notes**
