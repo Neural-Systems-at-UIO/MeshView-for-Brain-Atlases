@@ -1,4 +1,4 @@
-**Installation requirements**
+**Installation**
 -----------------------------
 **System requirements**
 ~~~~~~~~~~~~~~~~~~~~~~~~
