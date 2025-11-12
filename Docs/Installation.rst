@@ -7,10 +7,8 @@ Any web browser can be used.
 
 **Technical information**
 
-WebAlign can be used directly (see links further down) but is also available as a web-service through EBRAINS. Please consult these page if you want to analyse your our data and generate point clouds representing your data: 
+WebAlign can be used directly (see links further down) but is also available in the QUINT online workflow https://quint-online.apps.ebrains.eu/ and the LocaliView workflow https://localiview.apps.ebrains.eu/ through EBRAINS.
 
-* `Image annotation and coordinate extraction <https://www.ebrains.eu/brain-atlases/analysis/image-annotation-and-export-of-coordinate-points>`_
-* `Coordinate extraction from histological image series <https://www.ebrains.eu/brain-atlases/analysis/labelled-features-analysis>`_
 
 **Conditions of use**
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -33,6 +31,8 @@ Source code: MIT License.
 **Access**
 ~~~~~~~~~~~~
 
+* Individual links can be found here:
+
 `Waxholm Space Atlas of the Sprague Dawley Rat Brain v2 <https://meshview.apps.ebrains.eu/?atlas=WHS_SD_Rat_v2_39um>`_ - hierarchical, 80 visible structures, with "inner ear". 
 
 `Waxholm Space Atlas of the Sprague Dawley Rat Brain v3 <https://meshview.apps.ebrains.eu/?atlas=WHS_SD_Rat_v3_39um>`_ - hierarchical, 118 visible structures.
@@ -44,6 +44,9 @@ Source code: MIT License.
 `Allen Mouse Brain Atlas CCFv3 2017 <https://meshview.apps.ebrains.eu/?atlas=ABA_Mouse_CCFv3_2017_25um>`_ - hierarchical, 670 visible structures, with "root" (transparent at start).  
 
 `Allen Mouse Brain Atlas CCFv3 root <https://meshview.apps.ebrains.eu/?atlas=AMBA_CCFv3_root>`_ - root structure only (brain outline).
+
+* For versions with double cut of the point clouds se here:
+https://meshview-for-brain-atlases.readthedocs.io/en/latest/displaying.html#meshview-with-double-cut-feature
 
 **Versions and release notes**
 
