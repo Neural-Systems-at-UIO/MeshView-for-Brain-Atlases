@@ -5,10 +5,6 @@
 Web application for realtime 3D display of mesh-data representing structural parcellations, and generation of user defined cut planes. 
 Any web browser can be used.
 
-**Technical information**
-
-
-
 
 **Conditions of use**
 ~~~~~~~~~~~~~~~~~~~~~~
