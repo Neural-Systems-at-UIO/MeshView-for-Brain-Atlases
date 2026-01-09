@@ -7,6 +7,8 @@ async function loadlz(filename) {
             .then(response => response.json());
     const cloud = [];
     //debugger;
+    const color = lz?.settings?.markercolor;
+    const [r,g,b] = color ? [1,3,5].map(i => parseInt(color.substr(i,2),16)) : [0,0,0];
     for (const section of lz.sections)
         if (section.ouv && section.poi) { // todo: propagation, nonlin
             const {filename, ouv, poi} = section;
@@ -15,7 +17,7 @@ async function loadlz(filename) {
                     ouv[1] + p2d.x * ouv[4] / section.width + p2d.y * ouv[7] / section.height,
                     ouv[2] + p2d.x * ouv[5] / section.width + p2d.y * ouv[8] / section.height
                 ]);
-            cloud.push({name: filename, r: 0, g: 0, b: 0, triplets});
+            cloud.push({name: filename, r, g, b, triplets});
         }
     return {filename, lz, cloud};
 }
