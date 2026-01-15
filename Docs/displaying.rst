@@ -50,11 +50,12 @@ It is possible to upload coordinates directly as coordinate triplets
 (17) The clouds can be toggled
 (18) Slider for the point size
 
-Opening LocaliZoom files in the EBRAINS collab
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-MeshView can open annotations from LocaliZoom files saved in the storage Bucket (.lz files) 
-The "screenshot" button allows to capture the main window view as a png file.
-For more information, see:  https://wiki.ebrains.eu/bin/view/Collabs/image-registration-and-analysis-demo/1.%20Create%20your%20own%20working%20space/
+Opening point clouds created with LocaliZoom in the LocaliView workbench
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The localiView workbench can be accessed here: https://localiview.apps.ebrains.eu/
+
+It can be used with an EBRAINS account. Futher information can be found here: https://localiview.readthedocs.io/en/latest/
 
 .. image:: 483026fbdc47496f8b140360f8bcbb0c/media/image19.png
    :width: 6.3in
