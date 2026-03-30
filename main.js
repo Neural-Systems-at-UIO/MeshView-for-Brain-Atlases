@@ -950,7 +950,7 @@ async function collab_open() {
         const cstyle=document.getElementById("consolediv").style;
         cstyle.display="block";
         const cpre=document.getElementById("consolepre");
-        const {label,json,update,stop}=await loadzip(pick,cpre);
+        const {label,json,update,stop}=await loadnutilzip(pick,cpre);
         stop();
         cloud=json;
         cstyle.display="none";

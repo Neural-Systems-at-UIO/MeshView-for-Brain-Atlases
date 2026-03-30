@@ -22,7 +22,7 @@ async function loadlz(filename) {
     return {filename, lz, cloud};
 }
 
-async function loadzip(filename, pre) {
+async function loadnutilzip(filename, pre) {
     let phase = 0;
     let msg = `Opening ${filename} `;
     const spinner = setInterval(() => {

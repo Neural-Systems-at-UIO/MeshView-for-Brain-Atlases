@@ -75,7 +75,7 @@ $json["token"]=$token;
                     launch();
                     return;
                 }
-                let {label,json,update,stop}=await loadzip(choice.pick,pre);
+                let {label,json,update,stop}=await loadnutilzip(choice.pick,pre);
                 label={
                     "Allen Mouse Brain 2015":"ABA_Mouse_CCFv3_2015_25um",
                     "Allen Mouse Brain 2017":"ABA_Mouse_CCFv3_2017_25um",
