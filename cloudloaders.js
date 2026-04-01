@@ -59,3 +59,85 @@ async function loadnutilzip(filename, pre) {
         return {label, json, update, stop};
     return{stop};
 }
+
+async function loadzip(url) {
+    const buf = await fetch(url).then(response => response.arrayBuffer());
+    const dv = new DataView(buf);
+    let pos = 0;
+    function uint32() {
+        pos += 4;
+        return dv.getUint32(pos - 4, true);
+    }
+    function uint16() {
+        pos += 2;
+        return dv.getUint16(pos - 2, true);
+    }
+    const dec = new TextDecoder();
+    const groups = new Map;
+    while (pos < dv.byteLength) {
+        if (uint32() !== 0x04034b50)
+            break;
+        /*version*/uint16();
+        /*flag*/uint16();
+        let method = uint16();
+        /*timestamp*/uint16();
+        /*datestamp*/uint16();
+        /*crc*/uint32();
+        let csize = uint32();
+        let ucsize = uint32();
+        let fnlen = uint16();
+//                    console.log(fnlen);
+        let eflen = uint16();
+        let name = dec.decode(new Uint8Array(buf, pos, fnlen));
+        console.log(name, csize, ucsize);
+        pos += fnlen + eflen;
+        if (csize) {
+            const data = inflate(new Uint8Array(buf, pos));
+            const json = name.endsWith(".json")?JSON.parse(dec.decode(data)):false;
+            if (!name.includes("/")) {
+                addptshead(name.substring(0, name.length - 5));
+                for (const cloud of json) {
+                    addptscloud(cloud.name, [cloud.r, cloud.g, cloud.b], 1);
+                    cloud.r /= 255;
+                    cloud.g /= 255;
+                    cloud.b /= 255;
+                    var pts = new Points(cloud);
+                    pts.createBuffer(gl);
+                    points.push(pts);
+                }
+            } else {
+                const parts = name.split(/\/([^/]+$)/);
+                if(!groups.has(parts[0]))
+                    groups.set(parts[0],new Map);
+                groups.get(parts[0]).set(json?"json":parts[1],json||data);
+            }
+            pos += csize;
+        }
+    }
+    for(const group of groups.values()) {
+        console.log(group);
+        const json = group.get("json");
+        addptshead(json.name);
+        for(const cloud of json.clouds) {
+            addptscloud(cloud.name, [cloud.r, cloud.g, cloud.b], 1);
+            const raw = group.get(cloud.name+".bin");
+            const floats = new Float32Array(raw.buffer, 4);
+            
+            const buffer=gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, floats, gl.STATIC_DRAW);
+            
+            points.push({
+                buffer,
+                r:cloud.r/255,g:cloud.g/255,b:cloud.b/255,
+                count:floats.length/3,
+                drawArray(gl,coords){
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.vertexAttribPointer(coords, 3, gl.FLOAT, false, 3*4, 0);
+                    gl.drawArrays(gl.POINTS,0,this.count);
+                }
+            });
+        }
+    }
+    redraw();
+}

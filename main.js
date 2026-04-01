@@ -664,6 +664,10 @@ function transparentMesh(flatrf){
 }
 
 function autoload(url){
+    if(url.endsWith(".zip")){
+        loadzip(url);
+        return;
+    }
     var start=Date.now();
     var xhr=new XMLHttpRequest();
     xhr.open("GET",url);
