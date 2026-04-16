@@ -1148,3 +1148,56 @@ function popover(html){
     p.showPopover();
     setTimeout(()=>p.hidePopover(),2000);
 }
+
+function saveCfg() {
+    const cfg={
+        meshview:{
+            atlas:atlasorg,
+//            orientation:[
+//                orb,
+//                bob,
+//                document.getElementById("scale").valueAsNumber
+//            ],
+            structures:[]
+        }
+    };
+    const structures=cfg.meshview.structures;
+    for(const [id,struct] of atlas){
+        const item={
+            id,
+            alpha:struct.c_visibility.valueAsNumber
+        };
+        if(struct.c_color)
+            item.color=struct.c_color.value;
+        structures.push(item);
+    }
+    const blob = new Blob([JSON.stringify(cfg,null,4)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = atlasorg+".json";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+function loadCfg() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+    input.onchange = event => {
+        const reader = new FileReader;
+        reader.onload = event => {
+            const cfg = JSON.parse(event.target.result);
+            // TODO: checks
+//            [orb, bob, document.getElementById("scale").value] = cfg.meshview.orientation;
+            for(const item of cfg.meshview.structures) {
+                const structure = atlas.get(item.id);
+                structure.c_visibility.value = item.alpha;
+                if(item.color)
+                    structure.c_color.value = item.color;
+            }
+            redraw();
+        };
+        reader.readAsText(event.target.files[0]);
+    };
+    input.click();
+}
