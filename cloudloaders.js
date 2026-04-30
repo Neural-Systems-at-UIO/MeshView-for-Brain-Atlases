@@ -92,7 +92,10 @@ async function loadzip(url) {
         console.log(name, csize, ucsize);
         pos += fnlen + eflen;
         if (csize) {
-            const data = inflate(new Uint8Array(buf, pos));
+            const data =
+                    method === 8 ? inflate(new Uint8Array(buf, pos)) :
+                    method === 0 ? new Uint8Array(buf, pos, csize).slice() :
+                    0;
             const json = name.endsWith(".json")?JSON.parse(dec.decode(data)):false;
             if (!name.includes("/")) {
                 addptshead(name.substring(0, name.length - 5));
@@ -128,6 +131,7 @@ async function loadzip(url) {
             gl.bufferData(gl.ARRAY_BUFFER, floats, gl.STATIC_DRAW);
             
             points.push({
+                array:floats,
                 buffer,
                 r:cloud.r/255,g:cloud.g/255,b:cloud.b/255,
                 count:floats.length/3,

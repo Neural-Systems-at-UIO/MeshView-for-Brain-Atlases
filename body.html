@@ -6,7 +6,7 @@
         <label for="scale">Scale:</label><input type="range" id="scale" min="1" max="10" value="3" oninput="redraw()">
         <input type="checkbox" id="cut" onchange="toggleCut(event)"><label for="cut">Cut</label>
         | <span id="cloud_standalone">
-            Cloud: <input type="file" multiple accept="application/json" onchange="loadfiles(event)">
+            Cloud: <input type="file" multiple accept="application/json, application/zip" onchange="loadfiles(event)">
             <button onclick="simple_open()">Cloud from coordinates</button>
         </span><span id="cloud_collab">
             <button onclick="collab_open()">Add cloud</button>
@@ -30,6 +30,7 @@
                 <button onclick='hideall()'>Hide all</button>
             </div>
             <div id="ptscontainer"><table id="ptstable"></table></div>
+            <div id="ptssave"><button onclick="saveClouds()">Save</button></div>
         </div>
     </div>
 </div>

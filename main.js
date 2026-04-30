@@ -700,20 +700,26 @@ function autoload(url){
 function loadfiles(event)
 {
     for(let file of event.target.files){
-        let fr=new FileReader();
-        fr.onload=function(){
-            var data=JSON.parse(fr.result);
-            addptshead(file.name);
-            data.forEach(function(elem){
-                addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
-                elem.r/=255;elem.g/=255;elem.b/=255;
-                var pts=new Points(elem);
-                pts.createBuffer(gl);
-                points.push(pts);
-            });
-            redraw();
-        };
-        fr.readAsText(file);
+        if(file.name.endsWith(".json")) {
+            let fr=new FileReader();
+            fr.onload=function(){
+                var data=JSON.parse(fr.result);
+                addptshead(file.name);
+                data.forEach(function(elem){
+                    addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
+                    elem.r/=255;elem.g/=255;elem.b/=255;
+                    var pts=new Points(elem);
+                    pts.createBuffer(gl);
+                    points.push(pts);
+                });
+                redraw();
+            };
+            fr.readAsText(file);
+        } else if(file.name.endsWith(".zip")) {
+            const url = URL.createObjectURL(file);
+            loadzip(url)
+                    .then(()=>URL.revokeObjectURL(url));
+        }
     }
 }
 function openerThing(){
@@ -887,7 +893,8 @@ function simple_add(text){
     try{
 //        var table=points.length>0?document.getElementById("ptstable").innerHTML:
 //                "<tr><td><button onclick='showall()'>Show all</button></td><td><button onclick='hideall()'>Hide all</button></td></tr>";
-        if(!text)addptshead(cloud_head.value);
+        //if(!text)addptshead(cloud_head.value);
+        addptshead(text?"Clipboard":cloud_head.value);
 //        table+="<tr><td colspan='2' style='background-color:lightgray'>"+cloud_head.value+"</td></tr>";
         var lines=(text||document.getElementById("cloud_text").value).split(/\r?\n/);
         var name,r=0,g=0,b=0;
@@ -1014,6 +1021,8 @@ function screenshot(){
     });
 }
 
+const cloudcolumn = [];
+
 function getptstable(){
     document.getElementById("ptsbuttons").style.display="inline";
     return document.getElementById("ptstable");
@@ -1047,6 +1056,8 @@ function addptshead(name){
 //    td.innerText=name;
     tr.appendChild(td);
     getptstable().appendChild(tr);
+    
+    cloudcolumn.push({name, ran});
 }
 function addptscloud(name,color,size){
     const idx=points.length;
@@ -1074,6 +1085,8 @@ function addptscloud(name,color,size){
     tr.appendChild(rtd);
     tr.appendChild(ntd);
     getptstable().appendChild(tr);
+    
+    cloudcolumn.push({name, ran, col});
 }
 function pastecloud(event) {
     if(document.getElementById("simple_cloud").style.display==="block")
@@ -1200,4 +1213,56 @@ function loadCfg() {
         reader.readAsText(event.target.files[0]);
     };
     input.click();
+}
+
+function saveClouds() {
+    debugger;
+    const date = new Date;
+    const te = new TextEncoder;
+    const zipitems = [];
+    
+    let pointidx = 0;
+    let current = false;
+    let directory = 0;
+    for(const item of cloudcolumn) {
+        if(!item.hasOwnProperty("col")) {
+            if(current){
+                zipitems.push({
+                    name:directory+"/"+current.name+".json",
+                    date,
+                    data:te.encode(JSON.stringify(current))
+                });
+            }
+            directory++;
+            current={name:item.name,clouds:[]};
+        }else{
+            const floats=points[pointidx++].array;
+            const data=new Uint8Array(floats.byteLength+4);
+            data.set(te.encode("PTS0"));
+            data.set(new Uint8Array(floats.buffer,floats.byteOffset,floats.byteLength),4);
+            const color=item.col.value.slice(-6);
+            zipitems.push({
+                name:directory+"/"+item.name+".bin",
+                date,
+                data
+            });
+            current.clouds.push({
+                name:item.name,
+                r:parseInt(color.substring(0,2),16),
+                g:parseInt(color.substring(2,4),16),
+                b:parseInt(color.substring(4),16)
+            });
+        }
+    }
+    zipitems.push({
+        name:directory+"/"+current.name+".json",
+        date,
+        data:te.encode(JSON.stringify(current))
+    });
+    const url = URL.createObjectURL(zipstore(zipitems));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "clouds.zip";
+    a.click();
+    URL.revokeObjectURL(url);
 }
