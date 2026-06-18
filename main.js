@@ -1,7 +1,7 @@
 var collab;
 var moz=navigator.userAgent.toLowerCase().indexOf('firefox')>-1;
-var atlasroot="WHS_SD_rat_atlas_v2";
-var atlasorg="WHS_SD_Rat_v2_39um";
+var atlasroot;
+var atlasorg;
 var atlas_config;
 let cut_hack=false;
 function startmv(){
@@ -13,6 +13,11 @@ function startmv(){
     drawCut();
     location.search.slice(1).split("&").forEach(function(pair){
         if(pair.length===0)return;
+        // probably not needed, but if someone ever stored a link with "default" atlas, this will make it work
+        if(!atlasorg){
+            atlasroot="WHS_SD_rat_atlas_v2";
+            atlasorg="WHS_SD_Rat_v2_39um";
+        }
         var parts=pair.split("=");
         switch(parts[0]){
             case "atlas":
@@ -46,6 +51,10 @@ function startmv(){
                     console.log("?",pair);
         }
     });
+    if(!atlasorg){
+        document.getElementById("dlg_atlas").showModal();
+        return;
+    }
     init();
     document.getElementById("atlas").innerText=atlasorg.replace(/_/g," ");
 
@@ -1087,6 +1096,7 @@ function addptscloud(name,color,size){
     getptstable().appendChild(tr);
     
     cloudcolumn.push({name, ran, col});
+    document.getElementById("btn_ptssave").disabled = false;
 }
 function pastecloud(event) {
     if(document.getElementById("simple_cloud").style.display==="block")
@@ -1216,7 +1226,6 @@ function loadCfg() {
 }
 
 function saveClouds() {
-    debugger;
     const date = new Date;
     const te = new TextEncoder;
     const zipitems = [];
@@ -1265,4 +1274,13 @@ function saveClouds() {
     a.download = "clouds.zip";
     a.click();
     URL.revokeObjectURL(url);
+}
+
+function redirect(atlas) {
+    let url = location.href;
+    if(url.includes("#"))
+        url = url.substring(0, url.indexOf("#"));
+    if(url.includes("?"))
+        url = url.substring(0, url.indexOf("?"));
+    location.href = url + "?atlas=" + atlas;
 }

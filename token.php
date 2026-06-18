@@ -102,7 +102,10 @@ $json["token"]=$token;
             }
             async function launch(){
                 document.body.innerHTML=await fetch("body.html").then(response=>response.text());
-                document.getElementById("btn_cfg").hidden=true;
+                document.getElementById("atlas_cfg").hidden=true;
+                const pls=document.getElementById("pts_loadsave");
+                pls.hidden=true;
+                pls.style.display="none";
                 startmv();
             }
         </script>

@@ -6,7 +6,7 @@
         <label for="scale">Scale:</label><input type="range" id="scale" min="1" max="10" value="3" oninput="redraw()">
         <input type="checkbox" id="cut" onchange="toggleCut(event)"><label for="cut">Cut</label>
         | <span id="cloud_standalone">
-            Cloud: <input type="file" multiple accept="application/json, application/zip" onchange="loadfiles(event)">
+            Cloud: <input id="input_loadfiles" type="file" multiple accept="application/json, application/zip" onchange="loadfiles(event)">
             <button onclick="simple_open()">Cloud from coordinates</button>
         </span><span id="cloud_collab">
             <button onclick="collab_open()">Add cloud</button>
@@ -19,7 +19,7 @@
         <div id="meshpanel">
             <div id="global" style="display: flex">All:<input type="range" min="0" max="20" value="20" step="1" oninput="setGlobal(event)" style="width:100%"></div>
             <ul id="tree"></ul>
-            <div>Atlas <button id="btn_cfg" onclick="configString()">URL</button><button onclick="saveCfg()">Save</button><button onclick="loadCfg()">Load</button></div>
+            <div id="atlas_cfg">Atlas <button onclick="configString()">URL</button><button onclick="saveCfg()">Save</button><button onclick="loadCfg()">Load</button></div>
         </div>
         <div id="hsiz1" class="hsiz" onmousedown="hdrag1(event)"></div>
         <div id="spacer" onmousedown="mdown(event)" onmousemove="mmove(event)" onmouseup="mup(event)" onmouseout="mout(event)"></div>
@@ -30,7 +30,10 @@
                 <button onclick='hideall()'>Hide all</button>
             </div>
             <div id="ptscontainer"><table id="ptstable"></table></div>
-            <div id="ptssave"><button onclick="saveClouds()">Save</button></div>
+            <div id="pts_loadsave" style="display: flex;">
+                <button id="btn_ptssave" style="flex: auto;" onclick="saveClouds()" disabled>Save</button>
+                <button style="flex: auto;" onclick="input_loadfiles.click()">Load</button>
+            </div>
         </div>
     </div>
 </div>
@@ -62,3 +65,46 @@
     <pre id="consolepre"></pre>
 </div>
 <div id="popover" popover="auto"></div>
+<dialog id="dlg_atlas" closedby="none">
+    Species:
+    <ul>
+        <li><a href="#spc_mouse">Mouse</a></li>
+        <li><a href="#spc_rat">Rat</a></li>
+    </ul>
+    <h3 id="spc_mouse">Mouse</h3>
+    Please find atlas citation guidelines at<br>
+    <a href="https://alleninstitute.org/legal/citation-policy">https://alleninstitute.org/legal/citation-policy</a>
+    <h4>Allen Mouse Brain Atlas CCFv3, 2017</h4>
+    <div class="atlas" onclick="redirect('ABA_Mouse_CCFv3_2017_25um')">
+        <div style="width: 200px">669 anatomical structures and an outline</div>
+        <img src="images/AMBA2017.png">
+    </div>
+    <h4>Allen Mouse Brain Atlas CCFv3, 2015</h4>
+    <div class="atlas" onclick="redirect('ABA_Mouse_CCFv3_2015_25um')">
+        <div style="width: 200px">Reduced version with 210 anatomical structures and an outline</div>
+        <img src="images/AMBA2015.png">
+    </div>
+    <h4>Allen Mouse Brain Atlas CCFv3, outline only</h4>
+    <div class="atlas" onclick="redirect('AMBA_CCFv3_root')">
+        <div style="width: 200px">A single outline</div>
+        <img src="images/AMBARoot.png">
+    </div>
+    <h3 id="spc_rat">Rat</h3>
+    Please find atlas citation guidelines at<br>
+    <a href="https://www.nitrc.org/citation/?group_id=1081">https://www.nitrc.org/citation/?group_id=1081</a>
+    <h4>Waxholm Space Atlas of the Sprague Dawley Rat Brain v4</h4>
+    <div class="atlas" onclick="redirect('WHS_SD_Rat_v4_39um')">
+        <div style="width: 200px">222 anatomical structures (inlcuding 5 regions of inner ear) and an outline ("root")</div>
+        <img src="images/WHSv4.png">
+    </div>
+    <h4>Waxholm Space Atlas of the Sprague Dawley Rat Brain v3</h4>
+    <div class="atlas" onclick="redirect('WHS_SD_Rat_v3_39um')">
+        <div style="width: 200px">118 anatomical structures (including 5 regions of inner ear)</div>
+        <img src="images/WHSv3.png">
+    </div>
+    <h4>Waxholm Space Atlas of the Sprague Dawley Rat Brain v2</h4>
+    <div class="atlas" onclick="redirect('WHS_SD_Rat_v2_39um')">
+        <div style="width: 200px">79 anatomical structures + inner ear</div>
+        <img src="images/WHSv2.png">
+    </div>
+</dialog>

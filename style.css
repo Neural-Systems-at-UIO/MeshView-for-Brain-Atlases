@@ -177,3 +177,13 @@ td > input[type=range]{
     bottom:0;
     margin:auto;
 }
+
+.atlas{
+    display: flex;
+}
+.atlas:hover{
+    background: lightblue;
+}
+.atlas img{
+    mix-blend-mode: multiply;
+}
