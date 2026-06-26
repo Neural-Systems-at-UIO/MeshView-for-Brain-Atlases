@@ -72,25 +72,62 @@ async function loadzip(url) {
         pos += 2;
         return dv.getUint16(pos - 2, true);
     }
+
+    // EOCD
+    pos = buf.byteLength - 22;
+    const EOCD_magic = uint32();
+    if(EOCD_magic !== 0x06054b50){
+        console.log("EOCD magic 06054b50 expected, found "+EOCD_magic.toString(16));
+        return;
+    }
+    pos += 8; // skip disk count, directory start disk, number of entries on this disk, total number of entries
+    const dirsize = uint32();
+    const dirpos = uint32();
+
+    pos = dirpos;
+    
     const dec = new TextDecoder();
     const groups = new Map;
-    while (pos < dv.byteLength) {
-        if (uint32() !== 0x04034b50)
+    while(pos < dirpos + dirsize) {
+        const dir_magic = uint32();
+        if(dir_magic !== 0x02014b50){
+            console.log("dir_magic 02014b50 expected, found "+dir_magic.toString(16));
             break;
+        }
+        pos += 6; // skip version made, version need, gpflags
+        const method = uint16();
+        pos += 8; // skip time, date, crc32
+        const csize = uint32();
+        const ucsize = uint32();
+        const fnlen = uint16();
+        const eflen = uint16();
+        const comlen = uint16();
+        pos += 8; // skip disk nr, intattr, extattr
+        const hdroffset = uint32();
+        const name = dec.decode(new Uint8Array(buf, pos, fnlen));
+        console.log(name, hdroffset, csize, ucsize, eflen, comlen);
+        const next = pos + fnlen + eflen + comlen;
+
+        pos = hdroffset;
+        const entry_magic = uint32();
+        if(entry_magic !== 0x04034b50){
+            console.log("entry_magic 04034b50 expected, found "+entry_magic.toString(16));
+            break;
+        }
         /*version*/uint16();
         /*flag*/uint16();
-        let method = uint16();
+        /*let method =*/ uint16();
         /*timestamp*/uint16();
         /*datestamp*/uint16();
         /*crc*/uint32();
-        let csize = uint32();
-        let ucsize = uint32();
-        let fnlen = uint16();
+        const csize2 = uint32();
+        const ucsize2 = uint32();
+        const fnlen2 = uint16();
 //                    console.log(fnlen);
-        let eflen = uint16();
-        let name = dec.decode(new Uint8Array(buf, pos, fnlen));
-        console.log(name, csize, ucsize);
-        pos += fnlen + eflen;
+        const eflen2 = uint16();
+        const name2 = dec.decode(new Uint8Array(buf, pos, fnlen2));
+        console.log(name2, csize2, ucsize2, eflen2);
+        pos += fnlen2 + eflen2;
         if (csize) {
             const data =
                     method === 8 ? inflate(new Uint8Array(buf, pos)) :
@@ -114,9 +151,11 @@ async function loadzip(url) {
                     groups.set(parts[0],new Map);
                 groups.get(parts[0]).set(json?"json":parts[1],json||data);
             }
-            pos += csize;
+//            pos += csize;
         }
+        pos = next;
     }
+
     for(const group of groups.values()) {
         console.log(group);
         const json = group.get("json");
