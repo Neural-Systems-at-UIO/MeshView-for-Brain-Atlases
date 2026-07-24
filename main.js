@@ -1226,54 +1226,105 @@ function loadCfg() {
 }
 
 function saveClouds() {
-    const date = new Date;
-    const te = new TextEncoder;
-    const zipitems = [];
-    
+    const dlg = document.getElementById("dlg_ptssave");
+    dlg.show();
+    const tbody = document.getElementById("tbl_ptssave");
+    tbody.innerHTML = "";
+    const groups = [];
+    let group;
     let pointidx = 0;
-    let current = false;
-    let directory = 0;
     for(const item of cloudcolumn) {
+        const tr = document.createElement("tr");
         if(!item.hasOwnProperty("col")) {
-            if(current){
-                zipitems.push({
-                    name:directory+"/"+current.name+".json",
-                    date,
-                    data:te.encode(JSON.stringify(current))
+            const td = document.createElement("td");
+            td.innerText = item.name;
+            td.setAttribute("colspan","3");
+            td.contentEditable=true;
+            tr.appendChild(td);
+            group = {name:td,clouds:[]};
+            groups.push(group);
+        } else {
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = item.ran.valueAsNumber !== 0;
+            const cbtd = document.createElement("td");
+            cbtd.appendChild(cb);
+            tr.appendChild(cbtd);
+            const col = document.createElement("input");
+            col.type = "color";
+            col.value = item.col.value;
+            const coltd = document.createElement("td");
+            coltd.appendChild(col);
+            tr.appendChild(coltd);
+            const td = document.createElement("td");
+            td.innerText = item.name;
+            td.contentEditable=true;
+            tr.appendChild(td);
+            group.clouds.push({name:td,cb,col,data:points[pointidx++].array});
+        }
+        tbody.appendChild(tr);
+    }
+    document.getElementById("btn_dlgptssave").onclick = () => {
+        const te = new TextEncoder;
+        const raw = groups.reduce((arr, group) => {
+            const clouds = group.clouds.filter(cloud => cloud.cb.checked);
+            if(clouds.length)
+                arr.push({
+                    name: group.name.innerText,
+                    clouds: clouds.map(cloud => {
+                        const color = cloud.col.value.slice(-6);
+                        const data = cloud.data;
+                        const bin = new Uint8Array(data.byteLength + 4);
+                        bin.set(te.encode("PTS0"));
+                        bin.set(new Uint8Array(data.buffer, data.byteOffset, data.byteLength), 4);
+                        return {
+                            name: cloud.name.innerText,
+                            r:parseInt(color.substring(0,2),16),
+                            g:parseInt(color.substring(2,4),16),
+                            b:parseInt(color.substring(4),16),
+                            bin
+                        };
+                    })
                 });
+            return arr;
+        }, []);
+        const date = new Date;
+        const zipitems = [];
+        for(let i = 0; i < raw.length; i++) {
+            const group = raw[i];
+            for(const cloud of group.clouds) {
+                zipitems.push({
+                    name: i + "/" + cloud.name + ".bin",
+                    date,
+                    data: cloud.bin
+                });
+                delete cloud.bin;
             }
-            directory++;
-            current={name:item.name,clouds:[]};
-        }else{
-            const floats=points[pointidx++].array;
-            const data=new Uint8Array(floats.byteLength+4);
-            data.set(te.encode("PTS0"));
-            data.set(new Uint8Array(floats.buffer,floats.byteOffset,floats.byteLength),4);
-            const color=item.col.value.slice(-6);
             zipitems.push({
-                name:directory+"/"+item.name+".bin",
+                name: i + "/" + group.name + ".json",
                 date,
-                data
-            });
-            current.clouds.push({
-                name:item.name,
-                r:parseInt(color.substring(0,2),16),
-                g:parseInt(color.substring(2,4),16),
-                b:parseInt(color.substring(4),16)
+                data: te.encode(JSON.stringify(group))
             });
         }
-    }
-    zipitems.push({
-        name:directory+"/"+current.name+".json",
-        date,
-        data:te.encode(JSON.stringify(current))
-    });
-    const url = URL.createObjectURL(zipstore(zipitems));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "clouds.zip";
-    a.click();
-    URL.revokeObjectURL(url);
+        const url = URL.createObjectURL(zipstore(zipitems));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = document.getElementById("pts_zipname").value;
+        a.click();
+        URL.revokeObjectURL(url);
+        dlg.close();
+    };
+}
+
+function enforceZip(event){
+    let name = event.target.value;
+    if(name === "zip")
+        name = ".zip";
+    else if(!name.includes("."))
+        name += ".zip";
+    else
+        name = name.substring(0,name.lastIndexOf(".")) + ".zip";
+    event.target.value = name;
 }
 
 function redirect(atlas) {

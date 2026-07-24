@@ -108,3 +108,14 @@
         <img src="images/WHSv2.png">
     </div>
 </dialog>
+<dialog id="dlg_ptssave" closedby="any">
+    <div  style="display: flex; flex-direction: column;">
+    <table>
+        <tbody id="tbl_ptssave"></tbody>
+    </table><br>
+    <input id="pts_zipname" oninput="enforceZip(event)" value="clouds.zip">
+    <div style="text-align: center;">
+        <button onclick="dlg_ptssave.close()">Cancel</button>
+        <button id="btn_dlgptssave">Save</button>
+    </div>
+</dialog>

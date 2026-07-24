@@ -187,3 +187,11 @@ td > input[type=range]{
 .atlas img{
     mix-blend-mode: multiply;
 }
+#dlg_ptssave {
+    max-height: calc(100% - 6px - 2em);
+    overflow-y: auto;
+}
+#dlg_ptssave table, #dlg_ptssave tr, #dlg_ptssave td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
