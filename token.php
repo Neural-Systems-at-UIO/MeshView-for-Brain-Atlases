@@ -15,7 +15,12 @@ curl_setopt_array($token_ch, array(
     CURLOPT_POSTFIELDS => $token_params
 ));
 $token_res = curl_exec($token_ch);
-curl_close($token_ch);
+//curl_close($token_ch);
+if (PHP_VERSION_ID < 80000) { // deprecation message breaks operation in iframe
+  curl_close($token_ch);
+} else {
+  $token_ch = null; // probably overkill
+}
 $token_obj = json_decode($token_res, true);
 $token = $token_obj["access_token"];
 
