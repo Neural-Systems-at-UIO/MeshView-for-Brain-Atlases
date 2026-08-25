@@ -2,6 +2,7 @@ var collab;
 var moz=navigator.userAgent.toLowerCase().indexOf('firefox')>-1;
 var atlasroot;
 var atlasorg;
+var shortid;
 var atlas_config;
 let cut_hack=false;
 function startmv(){
@@ -56,7 +57,8 @@ function startmv(){
         return;
     }
     init();
-    document.getElementById("atlas").innerText=atlasorg.replace(/_/g," ");
+    shortid=atlasorg.substring(atlasorg.lastIndexOf("/")+1);
+    document.getElementById("atlas").innerText=shortid.replace(/_/g," ");
 
     let remaphack={
         "ABA_Mouse_CCFv3_2015_25um":"AMBA_CCFv3_2015_reduced",
@@ -67,6 +69,15 @@ function startmv(){
     }[atlasroot];
     if(remaphack)
         atlasroot=remaphack;
+    else if(!atlasroot.startsWith("http") && ![
+        "AMBA_CCFv3_2015_reduced",
+        "AMBA_CCFv3_2017_full",
+        "AMBA_CCFv3_root",
+        "WHS_SD_rat_atlas_v2",
+        "WHS_SD_rat_atlas_v3",
+        "WHS_SD_rat_atlas_v4"
+    ].includes(atlasroot))
+        atlasroot="https://data-proxy.ebrains.eu/api/v1/buckets/quint-atlas-binaries/MV-pngmeshes/"+atlasroot;
     
     var xhr=new XMLHttpRequest();
     xhr.open("GET",atlasroot+".json");
@@ -156,6 +167,7 @@ function jsonready(event){
         if(elem.c_color){
             var img=document.createElement("img");
             img.onload=imgLoad;
+            img.crossOrigin="anonymous";
             img.src=atlasroot+"/"+idx+".png";
             img.atlasindex=idx;
             total++;
@@ -1024,7 +1036,7 @@ function screenshot(){
         let url=URL.createObjectURL(blob);
         let a=document.createElement("a");
         a.href=url;
-        a.download=atlasorg+"_"+new Date().toISOString().replace(/[:.]/g,"-")+".png";
+        a.download=shortid+"_"+new Date().toISOString().replace(/[:.]/g,"-")+".png";
         a.click();
         URL.revokeObjectURL(url);
     });
@@ -1198,7 +1210,7 @@ function saveCfg() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = atlasorg+".json";
+    a.download = shortid+".json";
     a.click();
     URL.revokeObjectURL(url);
 }
