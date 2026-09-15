@@ -18,7 +18,8 @@ MeshView:
    :numbered:
    :maxdepth: 3
 
-   basic 
+   basic
+   saving_positions
    cut
    displaying
    publications
