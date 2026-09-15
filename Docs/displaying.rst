@@ -42,7 +42,7 @@ A new feature allows you to save your favorite point cloud settings. After eithe
 A zipped folder will be downloaded. You can then upload the zipped folder in another MeshView window after pressing "Load" in the bottom right corner.
 
 .. image:: 483026fbdc47496f8b140360f8bcbb0c/media/save_point_cloud_settings.png
-   :width: 3.48472in
+   :width: 6.3in
    :height: 3.00556in
 
 
