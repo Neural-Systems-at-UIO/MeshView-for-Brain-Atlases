@@ -36,6 +36,22 @@ Use json file obtained in the QUINT workflow
 (14) The brain region Meshes can be individually selected, made
      transparent or completely hidden.
    
+Save point cloud settings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A new feature allows you to save your favorite point cloud settings. After either hidding or changing color to your point clouds, you can save the configuration by pressing "Save" in the right bottom corner.
+A zipped folder will be downloaded. You can then upload the zipped folder in another MeshView window after pressing "Load" in the bottom right corner.
+
+.. image:: 483026fbdc47496f8b140360f8bcbb0c/media/save_point_cloud_settings.png
+   :width: 3.48472in
+   :height: 3.00556in
+
+
+
+
+
+
+
+
 Use coordinate upload
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
