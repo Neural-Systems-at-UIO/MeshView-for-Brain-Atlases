@@ -302,6 +302,7 @@ function mdown(event){
 function mup(event){
     mx=undefined;
     my=undefined;
+    redraw();
 }
 function mout(event){
     mx=undefined;
@@ -309,6 +310,7 @@ function mout(event){
 }
 function mmove(event){
     if(!mx)return;
+    setreset();
     orb+=mx;
     bob+=my;
     mx=event.offsetX;
@@ -327,8 +329,38 @@ function redraw(){
     drawreq=true;
     requestAnimationFrame(draw);
 }
+var currscale=1;
+var autoscale=1;
+var reset=false;
+function setreset(){
+    clearreset();
+    reset=setTimeout(doreset,100);
+}
+function clearreset(){
+    if(reset!==false){
+        clearTimeout(reset);
+        reset=false;
+    }
+}
+function doreset(){
+    autoscale=1;
+    draw();
+}
 function draw(){
     drawreq=false;
+
+    if(mx===undefined)
+        autoscale=1;
+    if(currscale!==autoscale){
+        currscale=autoscale;
+        const cnv=document.getElementById("cnv");
+        cnv.width=Math.floor((window.innerWidth-1)/currscale);
+        cnv.height=Math.floor((window.innerHeight-1)/currscale);
+        cnv.style = `width: ${window.innerWidth-1}px; height: ${window.innerHeight-1}px;`;
+        gl.viewport(0,0,cnv.width,cnv.height);
+    }
+
+    const ds = Date.now();
 
     var nope=true;
     var nomesh=true;
@@ -439,6 +471,17 @@ function draw(){
             cutCloud(flatrf,(maxx+minx)/2,(maxy+miny)/2,(maxz+minz)/2,maxx-minx,maxy-miny,maxz-minz);
             transparentMesh(flatrf);
         }
+    }
+    const pix = new Uint8Array(4).fill(123);
+    gl.readPixels(gl.drawingBufferWidth >> 1,gl.drawingBufferHeight >> 1,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pix);
+    const ft=Date.now()-ds;
+    console.log(ft,pix);
+    //if(ft>16)document.getElementById("r_scale").value++;
+    if(mx!==undefined){
+        if(ft>100)
+            autoscale++;
+        if(autoscale>1 && ft<50)
+            autoscale--;
     }
 }
 
