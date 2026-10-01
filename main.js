@@ -323,6 +323,8 @@ function mmove(event){
 }
 
 var points=[];
+var lines=[];
+var spheres=[];
 var drawreq=false;
 function redraw(){
     if(drawreq)return;
@@ -459,6 +461,8 @@ function draw(){
 
     if(!document.getElementById("cut").checked){
         solidMesh(flatrf,flatnrm);
+        solidSpheres(flatrf,flatnrm);
+        solidLines(flatrf);
         solidCloud(flatrf);
         transparentMesh(flatrf);
     }else{
@@ -482,6 +486,51 @@ function draw(){
             autoscale++;
         if(autoscale>1 && ft<50)
             autoscale--;
+    }
+}
+
+function solidLines(flatrf){
+    if(lines.length){
+
+        var prg=progs.solidlines;
+        gl.useProgram(prg);
+
+        var coords = gl.getAttribLocation(prg, "coords");
+        gl.enableVertexAttribArray(coords);
+
+        gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
+//        gl.uniform1f(gl.getUniformLocation(prg,"pointsize"),parseFloat(document.getElementById("psize").value));
+//        const psize=gl.getUniformLocation(prg,"pointsize");
+//        const psizebase=document.getElementById("psize").valueAsNumber;
+
+        var color=gl.getUniformLocation(prg,"color");
+        lines.forEach(function(elem,idx){
+//            const pscale=document.getElementById("siz"+idx).valueAsNumber;
+//            if(pscale>0 /*elem.enabled && elem.a===1*/ && elem.count>0){
+//                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
+//                const rgb=document
+//                        .getElementById("clr"+idx)
+//                        .value
+//                        .substring(1)
+//                        .match(/(.{2})/g)
+//                        .map(x=>parseInt(x,16)/255);
+                const rgb=[0,0,0];
+                gl.uniform4f(color,rgb[0],rgb[1],rgb[2],1);
+//                gl.uniform1f(psize,psizebase*pscale);
+                elem.drawArray(gl,coords);
+//            }
+        });
+//        gl.depthMask(false);
+//        gl.enable(gl.BLEND);
+//        gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+//        points.forEach(function(elem){
+//            if(elem.enabled && elem.a!==1 && elem.count>0){
+//                gl.uniform4f(color,elem.r,elem.g,elem.b,elem.a);
+//                elem.drawArray(gl,coords);
+//            }
+//        });
+//        gl.depthMask(true);
+//        gl.disable(gl.BLEND);
     }
 }
 
@@ -604,6 +653,32 @@ function solidMesh(flatrf,flatnrm){
             gl.uniform3f(color,elem.r,elem.g,elem.b);
             elem.mesh.drawElements(gl,coords,normals);
         }
+    });
+    gl.disableVertexAttribArray(normals);
+}
+function solidSpheres(flatrf,flatnrm){
+    var prg=progs.solidmesh;
+    gl.useProgram(prg);
+
+    gl.uniformMatrix4fv(gl.getUniformLocation(prg,"alltrf"),false,flatrf);
+    gl.uniformMatrix4fv(gl.getUniformLocation(prg,"normtrf"),false,flatnrm);
+
+    var coords = gl.getAttribLocation(prg, "coords");
+    gl.enableVertexAttribArray(coords);
+    var normals = gl.getAttribLocation(prg, "normals");
+    gl.enableVertexAttribArray(normals);
+
+    var color=gl.getUniformLocation(prg,"color");
+
+    gl.depthMask(true);
+
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    spheres.forEach(function(elem){
+//        if(elem.mesh && elem.a===1){
+            gl.uniform3f(color,0,1,0);
+            elem.drawElements(gl,coords,normals);
+//        }
     });
     gl.disableVertexAttribArray(normals);
 }
@@ -746,6 +821,7 @@ function autoload(url){
                 alert("Loading of point cloud "+url+" has failed.");
             return;
         }
+        if(!tryLocare(data)){
         var m=url.match(/.*\/(.*\/.*$)/);
         if(m && m[1])
             url=m[1].replace("/"," ");
@@ -756,10 +832,53 @@ function autoload(url){
             var pts=new Points(elem);
             pts.createBuffer(gl);
             points.push(pts);
-        });
+        });}
         redraw();
     };
     xhr.send();
+}
+function tryLocare(data){
+    if(typeof data==="object" && data.type==="LocareJSON"){
+        const triplets=[];
+        for(const o of data.LocareCollection){
+            const geometry=o.geometry;
+            const type=geometry?.type;
+            const coordinates=geometry?.coordinates;
+            if(type==="Cylinder"){
+//                triplets.push(...o.geometry.coordinates[0],...o.geometry.coordinates[1]);
+                triplets.push(...coordinates.flat());
+            }
+            if(type==="Sphere"){
+                const sphere=new Sphere(...coordinates,geometry.radius.value/data.metadata.targetAtlas.coordinateSpaceSetup.resolution.value);
+                sphere.createBuffers(gl);
+                spheres.push(sphere);
+            }
+            if(type==="Polygon"){
+                if(coordinates.length===4){
+                    const [a,b,c,d]=coordinates.map(p=>[...p]);
+                    for(let i=0;i<3;i++){
+                        b[i]-=a[i];
+                        c[i]-=a[i];
+                        d[i]-=a[i];
+                    }
+                    const db=Math.hypot(...b);
+                    const dc=Math.hypot(...c);
+                    const dd=Math.hypot(...d);
+                    if(dd>db && dd>dc)
+                        coordinates.push(...coordinates.splice(2,1));
+                }
+                const poly=new Lines({r:0,g:0,b:0,name:"",triplets:coordinates.flat()}, gl.LINE_LOOP);
+                poly.createBuffer(gl);
+                lines.push(poly);
+            }
+        }
+        if(triplets.length){
+            const lns=new Lines({r:0,g:0,b:0,name:"",triplets}, gl.LINES);
+            lns.createBuffer(gl);
+            lines.push(lns);
+        }
+        return true;
+    }
 }
 function loadfiles(event)
 {
@@ -768,14 +887,16 @@ function loadfiles(event)
             let fr=new FileReader();
             fr.onload=function(){
                 var data=JSON.parse(fr.result);
-                addptshead(file.name);
-                data.forEach(function(elem){
-                    addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
-                    elem.r/=255;elem.g/=255;elem.b/=255;
-                    var pts=new Points(elem);
-                    pts.createBuffer(gl);
-                    points.push(pts);
-                });
+                if(!tryLocare(data)){
+                    addptshead(file.name);
+                    data.forEach(function(elem){
+                        addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
+                        elem.r/=255;elem.g/=255;elem.b/=255;
+                        var pts=new Points(elem);
+                        pts.createBuffer(gl);
+                        points.push(pts);
+                    });
+                }
                 redraw();
             };
             fr.readAsText(file);

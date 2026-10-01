@@ -387,6 +387,23 @@ function buildshaders(gl){
 //            "    gl_FragColor=vec4(color*(1.-n)*0.3,n);"+
             "    gl_FragColor=color;"+
             "}"
+        ),
+        solidlines:buildprogram(gl,
+            "attribute vec3 coords;"+
+
+            "uniform mat4 alltrf;"+
+
+            "void main(void)"+
+            "{"+
+            "    gl_Position = vec4(coords, 1.)*alltrf;"+
+            "}",
+        
+            "precision highp float;"+
+            "uniform vec4 color;"+
+            "void main(void)"+
+            "{"+
+            "    gl_FragColor=color;"+
+            "}"
         )
     };
 }

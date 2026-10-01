@@ -35,6 +35,8 @@ $json["token"]=$token;
         <link href="style.css" rel="stylesheet">
         <script src="mesh.js"></script>
         <script src="points.js"></script>
+        <script src="lines.js"></script>
+        <script src="sphere.js"></script>
         <script src="shaders.js"></script>
         <script src="matrix.js"></script>
         <script src="main.js"></script>
