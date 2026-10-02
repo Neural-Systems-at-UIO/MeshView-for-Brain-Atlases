@@ -4,6 +4,7 @@ class Lines {
         this.g = data.g;
         this.b = data.b;
         this.mode = mode;
+        this.a = 1;
         //this.a = data.hasOwnProperty("a") ? data.a : 1;
         this.name = data.name;
         this.array = new Float32Array(data.triplets);

@@ -1,5 +1,9 @@
 class Sphere {
     constructor(x, y, z, r) {
+        this.a=1;
+        this.r=0;
+        this.g=1;
+        this.b=0;
         const phi = (Math.sqrt(5) + 1) / 2;
         const a = 1;
         const b = 1 / phi;

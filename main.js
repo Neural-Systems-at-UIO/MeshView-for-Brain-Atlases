@@ -9,6 +9,7 @@ function startmv(){
     document.body.onpaste=pastecloud;
     document.body.onmouseup=gmup;
     document.body.onmousemove=gmmove;
+    document.body.onkeypress=kpress;
     drag(cut_box,cut_handle);
     drag(simple_cloud,cloud_handle);
     drawCut();
@@ -480,7 +481,6 @@ function draw(){
     gl.readPixels(gl.drawingBufferWidth >> 1,gl.drawingBufferHeight >> 1,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pix);
     const ft=Date.now()-ds;
     console.log(ft,pix);
-    //if(ft>16)document.getElementById("r_scale").value++;
     if(mx!==undefined){
         if(ft>100)
             autoscale++;
@@ -507,18 +507,19 @@ function solidLines(flatrf){
         lines.forEach(function(elem,idx){
 //            const pscale=document.getElementById("siz"+idx).valueAsNumber;
 //            if(pscale>0 /*elem.enabled && elem.a===1*/ && elem.count>0){
-//                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
+            if(elem.a===1){
+                gl.uniform4f(color,elem.r,elem.g,elem.b,1);
 //                const rgb=document
 //                        .getElementById("clr"+idx)
 //                        .value
 //                        .substring(1)
 //                        .match(/(.{2})/g)
 //                        .map(x=>parseInt(x,16)/255);
-                const rgb=[0,0,0];
-                gl.uniform4f(color,rgb[0],rgb[1],rgb[2],1);
+//                const rgb=[0,0,0];
+//                gl.uniform4f(color,rgb[0],rgb[1],rgb[2],1);
 //                gl.uniform1f(psize,psizebase*pscale);
                 elem.drawArray(gl,coords);
-//            }
+            }
         });
 //        gl.depthMask(false);
 //        gl.enable(gl.BLEND);
@@ -675,10 +676,10 @@ function solidSpheres(flatrf,flatnrm){
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
     spheres.forEach(function(elem){
-//        if(elem.mesh && elem.a===1){
-            gl.uniform3f(color,0,1,0);
+        if(elem.a===1){
+            gl.uniform3f(color,elem.r,elem.g,elem.b);
             elem.drawElements(gl,coords,normals);
-//        }
+        }
     });
     gl.disableVertexAttribArray(normals);
 }
@@ -821,7 +822,7 @@ function autoload(url){
                 alert("Loading of point cloud "+url+" has failed.");
             return;
         }
-        if(!tryLocare(data)){
+        if(!tryLocare(data,url.substring(url.lastIndexOf("/")+1))){
         var m=url.match(/.*\/(.*\/.*$)/);
         if(m && m[1])
             url=m[1].replace("/"," ");
@@ -837,20 +838,39 @@ function autoload(url){
     };
     xhr.send();
 }
-function tryLocare(data){
+function tryLocare(data,name){
     if(typeof data==="object" && data.type==="LocareJSON"){
-        const triplets=[];
+        const details=document.createElement("details");
+        details.open=true;
+        const summary=document.createElement("summary");
+        summary.innerHTML="<input type='checkbox' checked oninput='blockcheck(event)'><input type='color' oninput='blockcolor(event)'>"+name;
+        details.appendChild(summary);
+        document.getElementById("dlg_locare").appendChild(details);
+//        const triplets=[];
         for(const o of data.LocareCollection){
             const geometry=o.geometry;
             const type=geometry?.type;
             const coordinates=geometry?.coordinates;
             if(type==="Cylinder"){
 //                triplets.push(...o.geometry.coordinates[0],...o.geometry.coordinates[1]);
-                triplets.push(...coordinates.flat());
+//                triplets.push(...coordinates.flat());
+                const line=new Lines({r:0,g:0,b:0,name:"",triplets:coordinates.flat()}, gl.LINES);
+                line.createBuffer(gl);
+                const div=document.createElement("div");
+                div.dataset.type="lines";
+                div.dataset.index=lines.length;
+                div.innerHTML="<input type='checkbox' checked oninput='docheck(event)'><input type='color' value='#000000' oninput='docolor(event)'>"+o.properties.name;
+                details.appendChild(div);
+                lines.push(line);
             }
             if(type==="Sphere"){
                 const sphere=new Sphere(...coordinates,geometry.radius.value/data.metadata.targetAtlas.coordinateSpaceSetup.resolution.value);
                 sphere.createBuffers(gl);
+                const div=document.createElement("div");
+                div.dataset.type="sphere";
+                div.dataset.index=spheres.length;
+                div.innerHTML="<input type='checkbox' checked oninput='docheck(event)'><input type='color' value='#00FF00' oninput='docolor(event)'>"+o.properties.name;
+                details.appendChild(div);
                 spheres.push(sphere);
             }
             if(type==="Polygon"){
@@ -869,16 +889,51 @@ function tryLocare(data){
                 }
                 const poly=new Lines({r:0,g:0,b:0,name:"",triplets:coordinates.flat()}, gl.LINE_LOOP);
                 poly.createBuffer(gl);
+                const div=document.createElement("div");
+                div.dataset.type="lines";
+                div.dataset.index=lines.length;
+                div.innerHTML="<input type='checkbox' checked oninput='docheck(event)'><input type='color' value='#000000' oninput='docolor(event)'>"+o.properties.name;
+                details.appendChild(div);
                 lines.push(poly);
             }
         }
-        if(triplets.length){
-            const lns=new Lines({r:0,g:0,b:0,name:"",triplets}, gl.LINES);
-            lns.createBuffer(gl);
-            lines.push(lns);
-        }
+//        if(triplets.length){
+//            const lns=new Lines({r:0,g:0,b:0,name:"",triplets}, gl.LINES);
+//            lns.createBuffer(gl);
+//            lines.push(lns);
+//        }
         return true;
     }
+}
+function docheck(event){
+    const dataset=event.target.parentNode.dataset;
+    const item={sphere:spheres,lines}[dataset.type];
+    item[dataset.index].a=event.target.checked?1:0;
+    redraw();
+}
+function docolor(event){
+    const dataset=event.target.parentNode.dataset;
+    const item={sphere:spheres,lines}[dataset.type];
+    item[dataset.index].r=parseInt(event.target.value.substring(1,3),16)/255;
+    item[dataset.index].g=parseInt(event.target.value.substring(3,5),16)/255;
+    item[dataset.index].b=parseInt(event.target.value.substring(5,7),16)/255;
+    redraw();
+}
+function blockcheck(event){
+    const checked=event.target.checked;
+    for(let cb of event.target.parentNode.parentNode.querySelectorAll(":scope input[type=checkbox]"))
+        if(cb.parentNode.tagName!=="SUMMARY"){
+            cb.checked=checked;
+            docheck({target:cb});
+        }
+}
+function blockcolor(event){
+    const color=event.target.value;
+    for(let inp of event.target.parentNode.parentNode.querySelectorAll(":scope input[type=color]"))
+        if(inp.parentNode.tagName!=="SUMMARY"){
+            inp.value=color;
+            docolor({target:inp});
+        }
 }
 function loadfiles(event)
 {
@@ -887,7 +942,7 @@ function loadfiles(event)
             let fr=new FileReader();
             fr.onload=function(){
                 var data=JSON.parse(fr.result);
-                if(!tryLocare(data)){
+                if(!tryLocare(data,file.name)){
                     addptshead(file.name);
                     data.forEach(function(elem){
                         addptscloud(elem.name,[elem.r,elem.g,elem.b],1);
@@ -1510,4 +1565,9 @@ function redirect(atlas) {
     if(url.includes("?"))
         url = url.substring(0, url.indexOf("?"));
     location.href = url + "?atlas=" + atlas;
+}
+
+function kpress(event){
+    if(event.key==="L")
+        document.getElementById("dlg_locare").show();
 }
